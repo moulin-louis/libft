@@ -1,6 +1,6 @@
 # libft
 ## Project by:
-- [@moulin-louis]()
+- [@moulin-louis](https://github.com/moulin-louis)
 ## Description:
 -C programming can be very tedious when one doesn’t have access to the highly useful
 standard functions. This project is about understanding the way these functions work,
