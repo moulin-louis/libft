@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 void ft_lstsort(t_list* head, int (*cmp_fn)(const void*, const void*)) {
-  if (cmp_fn == NULL)
+  if (cmp_fn == NULL || head == NULL)
     return;
   bool swapped = false;
   t_list* ptr;
