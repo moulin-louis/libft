@@ -22,6 +22,12 @@ typedef struct s_list {
 	struct s_list* next;
 } t_list;
 
+typedef struct {
+  uint8_t* data;
+  size_t len;
+  size_t capacity;
+} t_set;
+
 t_list* ft_lstmap(t_list* lst, void*(*f)(void*), void (*del)(void*));
 
 void ft_lstiter(t_list* lst, void (*f)(void*));
@@ -123,5 +129,9 @@ void ft_lstadd_front(t_list** lst, t_list* new);
 void ft_lstdelone(t_list* lst, void (*del)(void*));
 
 void clean_array(char** arr);
+
+uint32_t append_data_set(t_set* set, const void* data, const size_t len);
+
+int32_t read_file(const char* path, uint8_t** result, size_t* len);
 
 #endif
