@@ -11,8 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-
-     {
+uint32_t append_data_set(t_set* set, const void* data, const size_t len) {
   if (set->capacity < set->len + len) {
     const size_t new_capacity = (set->capacity + len) * 2;
     const void* new_data = realloc(set->data, new_capacity);
