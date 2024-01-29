@@ -11,51 +11,32 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-uint32_t append_data_set(t_set* set, const void* data, const size_t len) {
-  if (set->capacity < set->len + len) {
-    const size_t new_capacity = (set->capacity + len) * 2;
-    const void* new_data = realloc(set->data, new_capacity);
-    if (new_data == NULL) {
-      return 1;
-    }
-    set->capacity = new_capacity;
-    set->data = (uint8_t *)new_data;
-  }
-  ft_memcpy(set->data + set->len, data, len);
-  set->len += len;
-  return 0;
-}
 
 //Read the entire file into memory using a vector, return non-zero value if fail
-int32_t read_file(const char* path, uint8_t** result, size_t* len) {
-  t_set set = {};
+t_set* read_file(const char* path) {
   const int file = open(path, O_RDONLY);
   if (file == -1)
-    return 1;
-  set.data = malloc(1024);
-  if (set.data == NULL) {
-    close(file);
-    return 1;
-  }
-  set.capacity = 1024;
+    return NULL;
+  t_set* set = ft_set_new();
+  if (set == NULL)
+    return NULL;
   while (1) {
     char buff[4096];
-    const ssize_t retval = read(file, buff, sizeof(buff));
+    const ssize_t retval = read(file, buff, sizeof(buff) - 1);
     if (retval == -1) {
-      free(set.data);
+      ft_set_clean(set);
       close(file);
-      return 1;
+      return NULL;
     }
     if (retval == 0)
       break;
-    if (append_data_set(&set, buff, retval)) {
+    buff[retval] = 0;
+    if (ft_set_append(set, buff, retval + 1)) {
       close(file);
-      free(set.data);
-      return 1;
+      ft_set_clean(set);
+      return NULL;
     }
   }
   close(file);
-  *result = set.data;
-  *len = set.len;
-  return 0;
+  return set;
 }

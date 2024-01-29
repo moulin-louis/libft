@@ -17,11 +17,12 @@
 # include <stdint.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <stdio.h>
 
 typedef struct s_list {
-	void* content;
-	struct s_list* last_node;
-	struct s_list* next;
+  void* content;
+  struct s_list* last_node;
+  struct s_list* next;
 } t_list;
 
 typedef struct {
@@ -132,8 +133,20 @@ void ft_lstdelone(t_list* lst, void (*del)(void*));
 
 void clean_array(char** arr);
 
-uint32_t append_data_set(t_set* set, const void* data, const size_t len);
+//VECTOR FN
 
-int32_t read_file(const char* path, uint8_t** result, size_t* len);
+uint32_t ft_set_append(t_set* set, const void* data, const size_t len);
+
+uint32_t ft_set_reserve(t_set* set, const uint32_t capacity);
+
+void ft_set_clean(t_set* set);
+
+void ft_set_clear(t_set* set);
+
+t_set* ft_set_new(void);
+
+//OTHER FN
+
+t_set* read_file(const char* path);
 
 #endif

@@ -52,4 +52,5 @@ add_library(ft STATIC ./src/ft_atoi.c
         ./src/clean_split.c
         ./src/ft_lstfilter.c
         ./src/ft_lstsort.c
-        ./src/ft_read_file.c)
+        ./src/ft_read_file.c
+        ./src/ft_vector.c)
