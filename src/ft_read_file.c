@@ -17,7 +17,7 @@ t_set* read_file(const char* path) {
   const int file = open(path, O_RDONLY);
   if (file == -1)
     return NULL;
-  t_set* set = ft_set_new();
+  t_set* set = ft_set_new(sizeof(char));
   if (set == NULL)
     return NULL;
   while (1) {

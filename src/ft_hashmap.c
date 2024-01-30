@@ -3,87 +3,147 @@
 //
 
 #include "libft.h"
-#define HT_PRIME_1 151
-#define HT_PRIME_2 157
 
-t_htItem* ft_ht_newItem(const uint8_t* key, const uint8_t* data) {
-  t_htItem* result = malloc(sizeof(t_htItem));
-  if (result == NULL)
-    return NULL;
-  result->key = (uint8_t*)strdup((char*)(int8_t*)key);
-  if (result->key == NULL) {
-    free(result);
-    return NULL;
+#define ROTLEFT(a,b) ((a << b) ^ (a >> (32-(b))))
+#define C1 0xcc9e2d51
+#define C2 0x1b873593
+#define N 0xe6546b64
+#define F1 0x85ebca6b
+#define F2 0xc2b2ae35
+
+static uint32_t ft_murmurHash3(const void* data, const uint32_t nbytes, const uint32_t seed) {
+  uint32_t k;
+  uint32_t h = 0;
+  uint32_t result = seed;
+  const uint32_t nblocks = nbytes / 4;
+  const uint8_t* tails = data + nblocks * 4;
+
+  for (uint32_t idx = 0; idx < nblocks; ++idx) {
+    k = ((uint32_t*)data)[idx];
+    k *= C1;
+    k = ROTLEFT(k, 13);
+    k *= C2;
+
+    result = result ^ k;
+    result = ROTLEFT(result, 15);
+    result = result * 5 + N;
   }
-  result->data = (uint8_t*)strdup((char*)(int8_t*)data);
-  if (result->data == NULL) {
-    free(result->key);
-    free(result);
-    return NULL;
+  k = 0;
+  switch (nbytes & 3) {
+  case 3:
+    k ^= tails[2] << 16;
+    [[fallthrough]];
+  case 2:
+    k ^= tails[1] << 8;
+    [[fallthrough]];
+  case 1:
+    k ^= tails[0];
+    k *= C1;
+    k = ROTLEFT(k, 15);
+    k *= C2;
+    h ^= k;
+  default: {
   }
+  }
+  result = result & nbytes;
+  result ^= result >> 16;
+  result *= F1;
+  result ^= result >> 13;
+  result *= F2;
+  result ^= result >> 16;
   return result;
 }
 
-t_htItem* ft_ht_getItem(const t_hashTable* ht, const uint8_t* key) {
-  t_htItem* items = (t_htItem*)ht->data;
-  for (uint32_t idx = 0; idx < ht->len; idx += sizeof(t_htItem)) {
-    if (ft_memcmp(key, items[idx].key, ft_strlen((char *)(int8_t*)key)) == 0) {
-      return &items[idx];
-    }
+static void ft_ht_cleanItems(const t_set* items) {
+  for (uint32_t i = 0; i < items->len; ++i) {
+    t_htItem** item = items->data + i * items->nbytes_data;
+    if (*item == NULL)
+      continue;
+    free(*item);
   }
-  return NULL;
 }
 
-static void ft_ht_delItem(t_htItem* it) {
-  free(it->data);
-  free(it->key);
-  free(it);
-}
-
-static uint32_t ft_ht_hash(const uint8_t* data, const int32_t a, const int32_t m) {
-  uint64_t hash = 0;
-  const int32_t len_s = ft_strlen((char*)(int8_t*)data);
-  for (int32_t idx = 0; idx < len_s; ++idx) {
-    hash += (long)pow(a, len_s - (idx + 1) * data[idx]);
-    hash = hash % m;
+static uint32_t ft_ht_expendCapacity(t_hashTable* ht) {
+  t_set* old_set = ht->items;
+  ht->items = ft_set_new(8);
+  if (ht->items == NULL)
+    return 1;
+  if (ft_set_reserve(ht->items, old_set->capacity * 2))
+    return 2;
+  for (uint32_t i = 0; i < ht->items->len; ++i) {
+    const t_htItem* item = ft_set_get(old_set, i);
+    if (memcmp(item, (uint64_t[]){0}, sizeof(void*)) == 0)
+      continue;
+    ft_ht_insert(ht, item->key, item->nbytes_key, item->data);
   }
-  return (int32_t)hash;
+  ft_ht_cleanItems(old_set);
+  ft_set_clean(old_set);
+  return 0;
 }
 
-static int32_t ft_ht_getHash(const uint8_t* data, const int32_t num_buckets, const int32_t attempt) {
-  const int32_t hash_a = ft_ht_hash(data, HT_PRIME_1, num_buckets);
-  const int32_t hash_b = ft_ht_hash(data, HT_PRIME_2, num_buckets);
-  return (hash_a + attempt * (hash_b + 1)) % num_buckets;
-}
-
-// int32_t ft_ht_insert(t_hashTable* ht, const uint8_t* key, const uint8_t* data) {
-  // t_htItem* it = ft_ht_newItem(key, data);
-  // int32_t idx = ft_ht_getHash(it->key, ht->len, 0);
-  // t_htItem* cur_item = ft_ht_getItem(ht, it->key);
-  // uint32_t i = 0;
-  // return 0;
-// }
-
-uint8_t* ft_ht_get(const t_hashTable* ht, const uint8_t* key) {
-  const t_htItem* it = ft_ht_getItem(ht, key);
-  if (it == NULL)
+t_htItem* ft_ht_createItem(const void* key, const uint32_t nbytes_key, const void* data) {
+  t_htItem* result = calloc(1, sizeof(t_htItem));
+  if (result == NULL)
     return NULL;
-  return it->data;
+  result->key = key;
+  result->nbytes_key = nbytes_key;
+  result->data = data;
+  return result;
+}
+
+uint32_t ft_ht_insert(t_hashTable* ht, const void* key, const uint32_t nbytes_key, const void* data) {
+  uint32_t idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
+  while (ft_ht_hasKey(ht, key, nbytes_key)) {
+    ft_ht_expendCapacity(ht);
+    printf("expending capacity\n");
+    idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
+  }
+  const t_htItem* item = ft_ht_createItem(key, nbytes_key, data);
+  if (item == NULL)
+    return 1;
+  ft_set_insert(ht->items, item, idx);
+
+  return 0;
+}
+
+bool ft_ht_hasKey(const t_hashTable* ht, const void* key, const uint32_t nbytes_key) {
+  const uint32_t idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
+  const void* tmp = ft_set_get(ht->items, idx);
+  if (tmp == NULL)
+    return false;
+  return memcmp(tmp, (uint64_t[]){0}, ht->items->nbytes_data) ? true : false;
+}
+
+t_htItem* ft_ht_get(const t_hashTable* ht, const void* key, const uint32_t nbytes_key) {
+  const uint32_t idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
+  return *(t_htItem**)ft_set_get(ht->items, idx);
+}
+
+uint32_t ft_ht_set(const t_hashTable* ht, const void* key, const uint32_t nbytes_key, const void* data) {
+  const uint32_t idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
+  if (ft_ht_hasKey(ht, key, nbytes_key) == false)
+    return 1;
+  ft_set_set(ht->items, idx, data, sizeof(data));
+  return 0;
 }
 
 t_hashTable* ft_ht_new(void) {
-  t_hashTable* result = calloc(1, sizeof(t_hashTable));
+  t_hashTable* result = ft_calloc(1, sizeof(t_hashTable));
   if (result == NULL)
-    return result;
-  result->items = ft_set_new();
+    return NULL;
+  result->items = ft_set_new(sizeof(void*));
   if (result->items == NULL) {
     free(result);
     return NULL;
   }
+  ft_set_reserve(result->items, 13);
+  ft_set_append(result->items, (uint8_t[]){0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 13);
+  result->seed = time(NULL);
   return result;
 }
 
 void ft_ht_clean(t_hashTable* ht) {
+  ft_ht_cleanItems(ht->items);
   ft_set_clean(ht->items);
   free(ht);
 }

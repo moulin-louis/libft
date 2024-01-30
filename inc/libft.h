@@ -15,11 +15,11 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdint.h>
-# include <sys/stat.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <string.h>
-# include <math.h>
+# include <time.h>
+# include <stdbool.h>
 
 typedef struct s_list {
   void* content;
@@ -28,21 +28,23 @@ typedef struct s_list {
 } t_list;
 
 typedef struct {
-  uint8_t* data;
+  void* data;
+  uint64_t nbytes_data;
   size_t len;
   size_t capacity;
 } t_set;
 
 typedef struct {
-  uint8_t* key;
-  uint8_t* data;
+  const void* key;
+  uint64_t nbytes_key;
+  const void* data;
 } t_htItem;
 
 typedef struct {
-  uint32_t size;
-  uint32_t count;
-  t_set   *items;
+  uint32_t seed; //seed used for hashing algo
+  t_set* items; //vector of items
 } t_hashTable;
+
 
 t_list* ft_lstmap(t_list* lst, void*(*f)(void*), void (*del)(void*));
 
@@ -148,22 +150,37 @@ void clean_array(char** arr);
 
 //VECTOR FN
 
-uint32_t ft_set_append(t_set* set, const void* data, size_t len);
-
-uint32_t ft_set_reserve(t_set* set, uint32_t capacity);
-
-void ft_set_clean(t_set* set);
+t_set* ft_set_new(uint32_t nbytes);
 
 void ft_set_clear(t_set* set);
 
-t_set* ft_set_new(void);
+void ft_set_clean(t_set* set);
 
-// HASHMAP FN
+uint32_t ft_set_reserve(t_set* set, uint32_t capacity);
+
+bool ft_set_has(const t_set* set, const void* data);
+
+void* ft_set_get(const t_set* set, uint32_t idx);
+
+uint32_t ft_set_set(const t_set* set, uint32_t idx, const void* data, uint32_t nbytes_data);
+
+uint32_t ft_set_insert(t_set* set, const void* data, uint32_t idx);
+
+uint32_t ft_set_append(t_set* set, const void* data, size_t len);
+
+// HASHTABLES FN
 
 t_hashTable* ft_ht_new(void);
 
-void ft_ht_clean(t_hashTable* ht);
+uint32_t ft_ht_insert(t_hashTable* ht, const void* key, uint32_t nbytes_key, const void* data);
 
+bool ft_ht_hasKey(const t_hashTable* ht, const void* key, uint32_t nbytes_key);
+
+t_htItem* ft_ht_get(const t_hashTable* ht, const void* key, uint32_t nbytes_key);
+
+uint32_t ft_ht_set(const t_hashTable* ht, const void* key, const uint32_t nbytes_key, const void* data);
+
+void ft_ht_clean(t_hashTable* ht);
 //OTHER FN
 
 t_set* read_file(const char* path);

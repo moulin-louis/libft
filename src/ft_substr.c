@@ -22,10 +22,10 @@ static int ft_count_malloc(char* s, unsigned int start, size_t len) {
 	return (0);
 }
 
-char* ft_substr(char const* s, unsigned int start, size_t len) {
+char* ft_substr(char const* s, int32_t start, size_t len) {
 	char* result;
-	int i;
-	int j;
+	int32_t i;
+	int32_t j;
 	int malloc_count;
 
 	malloc_count = ft_count_malloc((char *)s, start, len);
@@ -35,7 +35,7 @@ char* ft_substr(char const* s, unsigned int start, size_t len) {
 	i = 0;
 	j = 0;
 	while (s[i]) {
-		if ((unsigned int)i >= start && j < (int)len) {
+		if (i >= start && j < (int)len) {
 			result[j] = s[i];
 			j++;
 		}
