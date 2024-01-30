@@ -174,6 +174,8 @@ t_hashTable* ft_ht_new(void);
 
 uint32_t ft_ht_insert(t_hashTable* ht, const void* key, uint32_t nbytes_key, const void* data);
 
+uint32_t ft_ht_insertItems(t_hashTable* ht, const t_htItem* item);
+
 bool ft_ht_hasKey(const t_hashTable* ht, const void* key, uint32_t nbytes_key);
 
 t_htItem* ft_ht_get(const t_hashTable* ht, const void* key, uint32_t nbytes_key);

@@ -59,15 +59,12 @@ uint32_t ft_set_insert(t_set* set, const void* data, const uint32_t idx) {
   if (set->capacity < set->len + (idx - set->len)) {
     if (ft_set_reserve(set, (set->capacity + (idx - set->len)) * 2))
       return 1;
-    printf("more memory allocated\n");
   }
   if (idx > set->len) {
     ft_memset(set->data + set->len, 0, idx - set->len);
     set->len = idx;
-    printf("new len at idx: %d\n", idx);
   }
   ft_memcpy(set->data + idx * set->nbytes_data, &data, set->nbytes_data);
-  printf("data inserted\n");
   return 0;
 }
 

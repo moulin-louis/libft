@@ -65,7 +65,7 @@ static void ft_ht_cleanItems(const t_set* items) {
 
 static uint32_t ft_ht_expendCapacity(t_hashTable* ht) {
   t_set* old_set = ht->items;
-  ht->items = ft_set_new(8);
+  ht->items = ft_set_new(sizeof(void*));
   if (ht->items == NULL)
     return 1;
   if (ft_set_reserve(ht->items, old_set->capacity * 2))
@@ -74,9 +74,8 @@ static uint32_t ft_ht_expendCapacity(t_hashTable* ht) {
     const t_htItem* item = ft_set_get(old_set, i);
     if (memcmp(item, (uint64_t[]){0}, sizeof(void*)) == 0)
       continue;
-    ft_ht_insert(ht, item->key, item->nbytes_key, item->data);
+    ft_ht_insertItems(ht, item);
   }
-  ft_ht_cleanItems(old_set);
   ft_set_clean(old_set);
   return 0;
 }
@@ -95,7 +94,6 @@ uint32_t ft_ht_insert(t_hashTable* ht, const void* key, const uint32_t nbytes_ke
   uint32_t idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
   while (ft_ht_hasKey(ht, key, nbytes_key)) {
     ft_ht_expendCapacity(ht);
-    printf("expending capacity\n");
     idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
   }
   const t_htItem* item = ft_ht_createItem(key, nbytes_key, data);
@@ -103,6 +101,17 @@ uint32_t ft_ht_insert(t_hashTable* ht, const void* key, const uint32_t nbytes_ke
     return 1;
   ft_set_insert(ht->items, item, idx);
 
+  return 0;
+}
+
+uint32_t ft_ht_insertItems(t_hashTable* ht, const t_htItem* item) {
+  uint32_t idx = ft_murmurHash3(item->key, item->nbytes_key, ht->seed) % ht->items->capacity;
+  while (ft_ht_hasKey(ht, item->key, item->nbytes_key)) {
+    ft_ht_expendCapacity(ht);
+    printf("expending capacity\n");
+    idx = ft_murmurHash3(item->key, item->nbytes_key, ht->seed) % ht->items->capacity;
+  }
+  ft_set_insert(ht->items, item, idx);
   return 0;
 }
 
