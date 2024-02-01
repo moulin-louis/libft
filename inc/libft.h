@@ -29,7 +29,7 @@ typedef struct s_list {
 
 typedef struct {
   void* data;
-  uint64_t nbytes_data;
+  const uint64_t nbytes_data;
   size_t len;
   size_t capacity;
 } t_set;
@@ -41,7 +41,7 @@ typedef struct {
 } t_htItem;
 
 typedef struct {
-  uint32_t seed; //seed used for hashing algo
+  uint64_t seed; //seed used for hashing algo
   t_set* items; //vector of items
 } t_hashTable;
 
@@ -150,7 +150,7 @@ void clean_array(char** arr);
 
 //VECTOR FN
 
-t_set* ft_set_new(uint32_t nbytes);
+t_set* ft_set_new(uint64_t nbytes);
 
 void ft_set_clear(t_set* set);
 
@@ -180,11 +180,14 @@ bool ft_ht_hasKey(const t_hashTable* ht, const void* key, uint32_t nbytes_key);
 
 t_htItem* ft_ht_get(const t_hashTable* ht, const void* key, uint32_t nbytes_key);
 
-uint32_t ft_ht_set(const t_hashTable* ht, const void* key, const uint32_t nbytes_key, const void* data);
+uint32_t ft_ht_set(const t_hashTable* ht, const void* key, uint32_t nbytes_key, const void* data);
 
 void ft_ht_clean(t_hashTable* ht);
+
 //OTHER FN
 
 t_set* read_file(const char* path);
+
+void ft_hexdump(const void* data, uint64_t nbytes, uint64_t row);
 
 #endif

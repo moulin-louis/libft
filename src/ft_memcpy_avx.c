@@ -18,14 +18,12 @@ static inline void align_memory_sse_asm(char** d, const char** s, size_t* n) {
 	);
 }
 
-static inline void align_memory_sse(char** d, const char** s, size_t* n) {
+static  void align_memory_sse(char** d, const char** s, size_t* n) {
 	while ((((uintptr_t)*d & 0x1F) || ((uintptr_t)*s & 0x1F)) && *n >= 16)
 		align_memory_sse_asm(d, s, n);
 }
 
-static inline void copy_chunks_avx_asm(char* d,
-                                       const char* s,
-                                       size_t* num_chunks) {
+static void copy_chunks_avx_asm(char* d, const char* s, size_t* num_chunks) {
 	asm volatile (
 		"1:                             \n\t"
 		"vmovdqa  (%1), %%ymm0          \n\t"

@@ -54,7 +54,8 @@ add_library(ft STATIC ./src/ft_atoi.c
         ./src/ft_lstsort.c
         ./src/ft_read_file.c
         ./src/ft_vector.c
-        src/ft_hashmap.c)
+        src/ft_hashmap.c
+        src/ft_hexdump.c)
 
 add_executable(tester ./test.c)
 target_link_libraries(tester ft)

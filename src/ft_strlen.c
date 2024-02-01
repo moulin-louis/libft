@@ -22,9 +22,7 @@ inline size_t ft_strlen(const char* str) {
 	unsigned long int longword, himagic, lomagic;
 	/* Handle the first few characters by reading one character at a time.
 	   Do this until CHAR_PTR is aligned on a longword boundary.  */
-	for (char_ptr = str; ((unsigned long int)char_ptr
-	                      & (sizeof (longword) - 1)) != 0;
-	     ++char_ptr)
+	for (char_ptr = str; ((unsigned long int)char_ptr& (sizeof (longword) - 1)) != 0; ++char_ptr)
 		if (*char_ptr == '\0')
 			return char_ptr - str;
 	/* All these elucidatory comments refer to 4-byte longwords,
