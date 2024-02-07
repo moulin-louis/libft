@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 project(ft C)
 
 include_directories(./inc)
-add_compile_options(-Wall -Werror -Wextra -g -O3 -mavx -msse2 -march=native -fno-builtin)
+add_compile_options(-Wall -Werror -Wextra -g -mavx -msse2 -msse4.2 -march=native -fno-builtin)
 
 add_library(ft STATIC ./src/ft_atoi.c
         ./src/ft_calloc.c
@@ -54,8 +54,10 @@ add_library(ft STATIC ./src/ft_atoi.c
         ./src/ft_lstsort.c
         ./src/ft_read_file.c
         ./src/ft_vector.c
-        src/ft_hashmap.c
-        src/ft_hexdump.c)
+        ./src/ft_hashmap.c
+        ./src/ft_hexdump.c
+        ./src/farmhash.c)
 
+add_compile_options(-g)
 add_executable(tester ./test.c)
 target_link_libraries(tester ft)

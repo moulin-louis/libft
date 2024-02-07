@@ -4,152 +4,156 @@
 
 #include "libft.h"
 
-#define ROTLEFT(a,b) ((a << b) ^ (a >> (32-(b))))
-#define C1 0xcc9e2d51
-#define C2 0x1b873593
-#define N 0xe6546b64
-#define F1 0x85ebca6b
-#define F2 0xc2b2ae35
+static uint32_t ft_ht_expendCapacity(t_hashTable *ht);
+static void ft_ht_cleanItems(const t_set *items);
 
-static uint32_t ft_murmurHash3(const void* data, const uint32_t nbytes, const uint32_t seed) {
-  uint32_t k;
-  uint32_t h = 0;
-  uint32_t result = seed;
-  const uint32_t nblocks = nbytes / 4;
-  const uint8_t* tails = data + nblocks * 4;
-
-  for (uint32_t idx = 0; idx < nblocks; ++idx) {
-    k = ((uint32_t*)data)[idx];
-    k *= C1;
-    k = ROTLEFT(k, 13);
-    k *= C2;
-
-    result = result ^ k;
-    result = ROTLEFT(result, 15);
-    result = result * 5 + N;
-  }
-  k = 0;
-  switch (nbytes & 3) {
-  case 3:
-    k ^= tails[2] << 16;
-    [[fallthrough]];
-  case 2:
-    k ^= tails[1] << 8;
-    [[fallthrough]];
-  case 1:
-    k ^= tails[0];
-    k *= C1;
-    k = ROTLEFT(k, 15);
-    k *= C2;
-    h ^= k;
-  default: {
-  }
-  }
-  result = result & nbytes;
-  result ^= result >> 16;
-  result *= F1;
-  result ^= result >> 13;
-  result *= F2;
-  result ^= result >> 16;
-  return result;
-}
-
-static uint32_t ft_ht_expendCapacity(t_hashTable* ht) {
-  t_set* old_set = ht->items;
-  ht->items = ft_set_new(sizeof(void*));
-  if (ht->items == NULL)
-    return 1;
-  if (ft_set_reserve(ht->items, old_set->capacity * 2))
-    return 2;
-  for (uint32_t i = 0; i < old_set->len; ++i) {
-    const t_htItem** item = ft_set_get(old_set, i);
-    if (ft_memcmp(item, (uint64_t[]){0}, old_set->nbytes_data) == 0)
-      continue;
-    ft_ht_insertItems(ht, *item);
-  }
-  ft_set_clean(old_set);
-  return 0;
-}
-
-t_htItem* ft_ht_createItem(const void* key, const uint32_t nbytes_key, const void* data) {
-  t_htItem* result = calloc(1, sizeof(t_htItem));
+t_hashTable *ft_ht_new(void) {
+  t_hashTable *result = ft_calloc(1, sizeof(t_hashTable));
   if (result == NULL)
     return NULL;
-  printf("one item created at addr %p\n", result);
-  result->key = key;
-  result->nbytes_key = nbytes_key;
-  result->data = data;
-  return result;
-}
-
-uint32_t ft_ht_insert(t_hashTable* ht, const void* key, const uint32_t nbytes_key, const void* data) {
-  uint32_t idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
-  while (ft_ht_hasKey(ht, key, nbytes_key)) {
-    printf("expending capacity\n");
-    ft_ht_expendCapacity(ht);
-    idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
-  }
-  const t_htItem* item = ft_ht_createItem(key, nbytes_key, data);
-  if (item == NULL)
-    return 1;
-  ft_set_insert(ht->items, item, idx);
-  return 0;
-}
-
-uint32_t ft_ht_insertItems(t_hashTable* ht, const t_htItem* item) {
-  printf("calling insertItems\n");
-  uint32_t idx = ft_murmurHash3(item->key, item->nbytes_key, ht->seed) % ht->items->capacity;
-  while (ft_ht_hasKey(ht, item->key, item->nbytes_key)) {
-    ft_ht_expendCapacity(ht);
-    idx = ft_murmurHash3(item->key, item->nbytes_key, ht->seed) % ht->items->capacity;
-  }
-  printf("item addr = %p\n", item);
-  ft_set_insert(ht->items, item, idx);
-  return 0;
-}
-
-bool ft_ht_hasKey(const t_hashTable* ht, const void* key, const uint32_t nbytes_key) {
-  const uint32_t idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
-  const void* tmp = ft_set_get(ht->items, idx);
-  if (tmp == NULL)
-    return false;
-  return memcmp(tmp, (uint64_t[]){0}, ht->items->nbytes_data) ? true : false;
-}
-
-t_htItem* ft_ht_get(const t_hashTable* ht, const void* key, const uint32_t nbytes_key) {
-  const uint32_t idx = ft_murmurHash3(key, nbytes_key, ht->seed) % ht->items->capacity;
-  return *(t_htItem**)ft_set_get(ht->items, idx);
-}
-
-t_hashTable* ft_ht_new(void) {
-  t_hashTable* result = ft_calloc(1, sizeof(t_hashTable));
-  if (result == NULL)
-    return NULL;
-  result->items = ft_set_new(sizeof(void*));
+  result->items = ft_set_new(sizeof(void *));
   if (result->items == NULL) {
     free(result);
     return NULL;
   }
-  ft_set_reserve(result->items, 13);
-  ft_set_append(result->items, (uint8_t[]){0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 13);
-  result->seed = time(NULL);
+  ft_set_reserve(result->items, 27);
+  result->seed = 1707303718;
   return result;
 }
 
-static void ft_ht_cleanItems(const t_set* items) {
-  for (uint32_t i = 0; i < items->len; ++i) {
-    t_htItem** item = ft_set_get(items, i);
-    if (memcmp(item, (uint64_t[]){0}, items->nbytes_data) == 0) {
-      continue;
+void ft_ht_clean(t_hashTable *ht, uint64_t (*free_fn)(t_htItem *item)) {
+  if (free_fn)
+    ft_ht_iterItem(ht, free_fn);
+  ft_ht_cleanItems(ht->items);
+  ft_set_clean(ht->items);
+  free(ht);
+}
+
+t_htItem *ft_ht_createItem(const void *key, const uint32_t nbytes_key, const void *data) {
+  t_htItem *result = calloc(1, sizeof(t_htItem));
+  if (result == NULL)
+    return NULL;
+  result->key = key;
+  result->nbytes_key = nbytes_key;
+  result->hash = farmhash64(key, nbytes_key);
+  result->data = data;
+  return result;
+}
+
+uint32_t ft_ht_insert(t_hashTable *ht, const void *key, const uint32_t nbytes_key, const void *data) {
+  const t_htItem *item = ft_ht_createItem(key, nbytes_key, data);
+  if (item == NULL)
+    return 1;
+  ft_ht_insertItems(ht, item);
+  return 0;
+}
+
+uint32_t ft_ht_insertItems(t_hashTable *ht, const t_htItem *item) {
+  uint64_t idx = item->hash % ht->items->capacity;
+  while (ft_ht_hasIdx(ht, idx)) {
+    t_htItem *tmp = ft_ht_getIdx(ht, idx);
+    if (item->key == tmp->key) {
+      free(tmp);
+      ft_set_insert(ht->items, item, idx);
+      return 0;
     }
+    if (ft_ht_expendCapacity(ht)) {
+      return 1;
+    }
+    idx = item->hash % ht->items->capacity;
+  }
+  ft_set_insert(ht->items, item, idx);
+  return 0;
+}
+
+bool ft_ht_hasKey(const t_hashTable *ht, const void *key, const uint32_t nbytes_key) {
+  const uint64_t idx = farmhash64(key, nbytes_key) % ht->items->capacity;
+  return ft_ht_hasIdx(ht, idx);
+}
+
+bool ft_ht_hasIdx(const t_hashTable *ht, const uint64_t idx) {
+  if (idx > ht->items->len)
+    return false;
+  t_htItem **item = ft_set_get(ht->items, idx);
+  return ft_memcmp(item, (uint64_t[]){0}, ht->items->nbytes_data) ? true : false;
+}
+
+t_htItem *ft_ht_getKey(const t_hashTable *ht, const void *key, const uint32_t nbytes_key) {
+  const uint64_t idx = farmhash64(key, nbytes_key) % ht->items->capacity;
+  return ft_ht_getIdx(ht, idx);
+}
+
+t_htItem *ft_ht_getIdx(const t_hashTable *ht, const uint64_t idx) {
+  t_htItem **item = ft_set_get(ht->items, idx);
+  return ft_memcmp(item, (uint64_t[]){0}, ht->items->nbytes_data) ? *item : NULL;
+}
+
+uint32_t ft_ht_deleteKey(const t_hashTable *ht, const void *key, const uint64_t nbytes_key) {
+  const uint64_t idx = farmhash64(key, nbytes_key) % ht->items->capacity;
+  return ft_ht_deleteIdx(ht, idx);
+}
+
+uint32_t ft_ht_deleteIdx(const t_hashTable *ht, const uint64_t idx) {
+  t_htItem *item = ft_ht_getIdx(ht, idx);
+  if (item == NULL)
+    return 1;
+  free(item);
+  return 0;
+}
+
+uint64_t ft_ht_iterItem(const t_hashTable *ht, uint64_t (*iter_fn)(t_htItem *item)) {
+  for (uint64_t i = 0; i <= ht->items->len; ++i) {
+    t_htItem* item = ft_ht_getIdx(ht, i);
+    if (item == NULL)
+      continue;
+    const uint64_t ret =  iter_fn(item);
+    if (ret)
+      return ret;
+  }
+  return 0;
+}
+
+void ft_ht_print(const t_hashTable *ht) {
+  ft_ht_printFn(ht, NULL, NULL);
+}
+
+void ft_ht_printFn(const t_hashTable *ht, void (*print_key)(const void *key), void (*print_data)(const void *data)) {
+  for (uint64_t i = 0; i < ht->items->len; ++i) {
+    const t_htItem *item = ft_ht_getIdx(ht, i);
+    if (item == NULL)
+      continue;
+    printf("Item:\t%lu\t", i);
+    print_key ? print_key(item->key) : printf("key: %#lx\t", *(uint64_t *)item->key);
+    printf("hash: %#lx\t", item->hash);
+    print_data ? print_data(item->data) : printf("data: %p\n", item->data);
+  }
+}
+
+static uint32_t ft_ht_expendCapacity(t_hashTable *ht) {
+  t_hashTable *ht2 = ft_ht_new();
+  if (ht2 == NULL)
+    return 1;
+  ft_set_reserve(ht2->items, ht->items->capacity * 4);
+  for (uint64_t i = 0; i <= ht->items->len; ++i) {
+    const t_htItem *item = ft_ht_getIdx(ht, i);
+    if (item == NULL)
+      continue;
+    ft_ht_insertItems(ht2, item);
+  }
+  ft_set_clean(ht->items);
+  ht->items = ht2->items;
+  free(ht2);
+  return 0;
+}
+
+static void ft_ht_cleanItems(const t_set *items) {
+  for (uint32_t i = 0; i <= items->len; ++i) {
+    t_htItem **item = ft_set_get(items, i);
+    if (memcmp(item, (uint64_t[]){0}, items->nbytes_data) == 0)
+      continue;
     free(*item);
   }
 }
 
 
-void ft_ht_clean(t_hashTable* ht) {
-  printf("\ndestroying map\n");
-  ft_ht_cleanItems(ht->items);
-  ft_set_clean(ht->items);
-  free(ht);
-}
+

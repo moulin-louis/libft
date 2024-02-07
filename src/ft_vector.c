@@ -12,6 +12,15 @@ t_set* ft_set_new(const uint64_t nbytes) {
   return result;
 }
 
+t_set* ft_set_clone(const t_set* set) {
+  t_set* result = ft_set_new(set->nbytes_data);
+  if (result == NULL)
+    return NULL;
+  ft_set_reserve(result, set->capacity);
+  ft_set_append(result, set->data, set->len * set->nbytes_data);
+  return result;
+}
+
 void ft_set_clear(t_set* set) {
   set->len = 0;
 }
@@ -22,7 +31,7 @@ void ft_set_clean(t_set* set) {
   free(set);
 }
 
-uint32_t ft_set_reserve(t_set* set, const uint32_t capacity) {
+uint64_t ft_set_reserve(t_set* set, const uint64_t capacity) {
   if (capacity <= set->capacity)
     return 0;
   uint8_t* new_ptr = realloc(set->data, capacity * set->nbytes_data);
@@ -43,13 +52,13 @@ bool  ft_set_has(const t_set* set, const void* data) {
   return false;
 }
 
-void* ft_set_get(const t_set* set, const uint32_t idx) {
+void* ft_set_get(const t_set* set, const uint64_t idx) {
   if (idx > set->len)
     return NULL;
   return set->data + idx * set->nbytes_data;
 }
 
-uint32_t ft_set_insert(t_set* set, const void* data, const uint32_t idx) {
+uint64_t ft_set_insert(t_set* set, const void* data, const uint64_t idx) {
 
   if (idx < set->len) {
     ft_memcpy(set->data + idx * set->nbytes_data, &data, set->nbytes_data);
@@ -65,12 +74,12 @@ uint32_t ft_set_insert(t_set* set, const void* data, const uint32_t idx) {
   return 0;
 }
 
-uint32_t ft_set_append(t_set* set, const void* data, const size_t len) {
-  if (set->capacity < set->len + len) {
-    if (ft_set_reserve(set, (set->capacity + len) * 2))
+uint64_t ft_set_append(t_set* set, const void* data, const size_t len) {
+  if (set->capacity < set->len + len / set->nbytes_data) {
+    if (ft_set_reserve(set, (set->capacity + len / set->nbytes_data) * 2))
       return 1;
   }
   ft_memcpy(set->data + set->len * set->nbytes_data, data, len);
-  set->len += len;
+  set->len += (len / set->nbytes_data);
   return 0;
 }
