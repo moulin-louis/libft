@@ -9,6 +9,6 @@ implementing and learning to use them.
 - Take the time to expand your libft throughout the year. However, when working
 on a new project, don’t forget to ensure the functions used in your library are allowed in
 the project guidelines.
-- Completed with my own implementation of: Dynamic Array(vector/set), HashTable(hashmap, dictionary), Red/Black Trees(c++ std::map, c++ std::set)
+- Completed with my own implementation of: Dynamic Array(vector/set), HashTable(hashmap, dictionary), Red/Black Trees(c++ std::map, c++ std::set), Single and Double Linked List.
 ## Note:
 - 125/100
