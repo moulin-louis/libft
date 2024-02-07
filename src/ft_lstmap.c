@@ -18,13 +18,13 @@ t_list* ft_lstmap(t_list* lst, void*(*f)(void*), void (*del)(void*)) {
 
 	if (!f || !del || !lst)
 		return (NULL);
-	result = ft_lstnew(f(lst->content));
+	result = ft_lstnew(f(lst->data));
 	if (!result)
 		return (NULL);
 	temp = result;
 	lst = lst->next;
 	while (lst) {
-		result->next = ft_lstnew(f(lst->content));
+		result->next = ft_lstnew(f(lst->data));
 		if (!result->next)
 			ft_lstdelone(result->next, del);
 		result = result->next;

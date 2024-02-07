@@ -17,11 +17,11 @@ void ft_lstsort(t_list* head, int (*cmp_fn)(const void*, const void*)) {
     ptr = head;
 
     while (ptr->next != NULL) {
-      if (cmp_fn(ptr->content, ptr->next->content) > 0) {
+      if (cmp_fn(ptr->data, ptr->next->data) > 0) {
         // Swap the content of the nodes
-        temp = ptr->content;
-        ptr->content = ptr->next->content;
-        ptr->next->content = temp;
+        temp = ptr->data;
+        ptr->data = ptr->next->data;
+        ptr->next->data = temp;
         swapped = true;
       }
       ptr = ptr->next;

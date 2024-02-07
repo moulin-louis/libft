@@ -22,30 +22,52 @@
 # include <fcntl.h>
 # include "farmhash.h"
 
+
+//LINKED LIST STRUCTURE
 typedef struct s_list {
-  void* content;
-  struct s_list* last_node;
-  struct s_list* next;
+  void* data; //DATA, CAN HOLD A DATA UP TO 64 BITS OR A POINTER
+  struct s_list* last_node; //POINTER TO THE LAST NODE OF THE LINKED LIST
+  struct s_list* next; //POINTER TO THE NEXT NODE OF THE LINKED LIST
 } t_list;
 
+//SET STRUCTURE
 typedef struct {
-  void* data;
-  const uint64_t nbytes_data;
-  size_t len;
-  size_t capacity;
+  void* data; //CONTENT ARRAY, GROW DYNAMICALY
+  const uint64_t nbytes_data; //NUMBER OF BYTES OF THE DATA
+  size_t len; //LEN OF THE SET
+  size_t capacity; //CAPACITY OF THE CONTENT ARRAY
 } t_set;
 
+//HASHMAP STRUCTURE
 typedef struct {
-  const void* key;
-  uint64_t nbytes_key;
-  uint64_t hash;
-  const void* data;
+  const void* key; //POINTER TO THE KEY, NEEDED TO ACCESS THE VALUE
+  uint64_t nbytes_key; //NUMBER OF BYTES OF THE KEY
+  uint64_t hash; //HASH OF THE KEY, HASHED BY THE FARMHASH HASHING FUNCTION
+  const void* data; //DATA, CAN HOLD A DATA UP TO 64 BITS OR A POINTER
 } t_htItem;
 
-typedef struct {
-  uint64_t seed; //seed used for hashing algo
-  t_set* items; //vector of items
-} t_hashTable;
+// typedef struct {
+  // uint64_t seed; //seed used for hashing algo
+  // t_set* items; //vector of items
+// } t_hashTable;
+
+//T_HASHTABLE IS A WRAPPER ARROUND T_SET
+//HASH THE KEY TO ACCESS DIRECTLY THE SET VIA AN INDEX
+typedef t_set t_hashTable;
+
+typedef enum {
+  RED,
+  BLACK
+} e_color;
+
+typedef struct s_rb {
+  e_color       color;
+  void*         data;
+  uint64_t      nbytes_data;
+  struct s_rb*  left;
+  struct s_rb*  right;
+  struct s_rb*  parent;
+} t_rb;
 
 
 t_list* ft_lstmap(t_list* lst, void*(*f)(void*), void (*del)(void*));

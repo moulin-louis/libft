@@ -9,10 +9,10 @@ void filter_lst(t_list** head, int (*filter)(const void*), void (*del)(void*)) {
   t_list* prev = NULL;
 
   while (current != NULL) {
-    if (filter(current->content)) {
+    if (filter(current->data)) {
       if (prev == NULL) {
         *head = current->next;
-        del(current->content);
+        del(current->data);
         free(current);
         current = *head;
       }
@@ -20,7 +20,7 @@ void filter_lst(t_list** head, int (*filter)(const void*), void (*del)(void*)) {
         t_list* temp = current;
         prev->next = current->next;
         current = current->next;
-        del(temp->content);
+        del(temp->data);
         free(temp);
       }
     }
