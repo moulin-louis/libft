@@ -8,52 +8,47 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-//RB Item structure
-typedef struct {
-  const void* key; //Pointer to the key, needed to access the value
-  uint64_t nbytes_key; //Number of bytes of the key
-  const void* data; //Actual data, can hold up to 64 bits or a pointer
-} t_rbItem;
-
 //Enum for red/black trees
 typedef enum {
   RED,      //RED variant
   BLACK,    //Black variant
 } e_color;
 
-//Struct for a red black trees
+typedef int(*t_cmp_fn)(const void*  data1, const void* data2);
+
+//Struct for a red black trees node
 typedef struct s_rb {
   e_color       color;        //Color of the current node (red or black)
-  void*         data;         //data, can hold data up to 64 bits or a pointer
-  uint64_t      nbytes_data;  //number of bytes of the data
+  const void*   data;         //data, can hold data up to 64 bits or a pointer
   struct s_rb*  left;         //left node
   struct s_rb*  right;        //right node
   struct s_rb*  parent;       //parent node
+} t_rbNode;
+
+typedef struct {
+  uint64_t  nbr_nodes;    //number of nodes in the tree
+  uint64_t  nbytes_data;  //number of bytes of the data
+  t_cmp_fn  cmp_fn;       //cmp_fn used to navigate the tree
+  t_rbNode* root;         //root node of the tree
 } t_rb;
 
 //Red/Black Trees FN
 
-t_rb* ft_rb_new(uint64_t nbytes_data);
+t_rb* ft_rb_new(t_cmp_fn cmp_fn, uint64_t nbytes_data);
 
 void ft_rb_clean(t_rb* rb);
 
-t_rbItem* ft_rb_createItem(const void* key, uint64_t nbytes_key, const void* data);
+uint64_t  ft_rb_insert(t_rb* rb, const void* data);
 
-uint64_t  ft_rb_insert(t_rb* rb, const void* key, uint64_t nbytes_key, const void* data);
+bool ft_rb_has(const t_rb* ht, const void* data, uint64_t nbytes_data);
 
-uint64_t ft_rb_insertItems(t_hashTable* ht, const t_htItem* item);
+t_htItem* ft_rb_get(const t_rb* ht, const void* data, uint64_t nbytes_data);
 
-bool ft_rb_hasKey(const t_hashTable* ht, const void* key, uint64_t nbytes_key);
+uint64_t ft_rb_delete(t_rb* ht, const void* data, uint64_t nbytes_data);
 
-t_htItem* ft_rb_getKey(const t_hashTable* ht, const void* key, uint64_t nbytes_key);
+uint64_t ft_rb_iterItem(const t_rb* ht, uint64_t (*iter_fn)(t_htItem* item));
 
-uint64_t ft_rb_set(const t_hashTable* ht, const void* key, uint64_t nbytes_key, const void* data);
+void ft_rb_print(const t_rbNode* ht, uint64_t space);
 
-uint64_t ft_rb_deleteKey(const t_hashTable* ht, const void* key, uint64_t nbytes_key);
-
-uint64_t ft_rb_iterItem(const t_hashTable* ht, uint64_t (*iter_fn)(t_htItem* item));
-
-void ft_rb_print(const t_hashTable* ht);
-
-void ft_rb_printFn(const t_hashTable* ht, void (*print_key)(const void* key), void (*print_data)(const void* data));
+void ft_rb_printFn(const t_rb* ht, void (*print_data)(const void* data));
 #endif //T_RB_H
