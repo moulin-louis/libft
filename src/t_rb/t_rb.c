@@ -42,7 +42,7 @@ void  ft_rb_print(const t_rbNode* root, uint64_t space) {
   for (uint64_t i = 10; i < space; i++)
     printf(" ");
   printf("%#lx\n", (uint64_t)root->data);
-  ft_rb_print(root->left, spacez);
+  ft_rb_print(root->left, space);
 }
 
 static t_rbNode* ft_rb_treeInsert(const t_cmp_fn cmp_fn, t_rbNode* root, const void* data) {
