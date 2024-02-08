@@ -25,7 +25,7 @@ void ft_set_clear(t_set* set) {
   set->len = 0;
 }
 
-void ft_set_clean(t_set* set) {
+void ft_set_destroy(t_set* set) {
   if (set->data)
     free(set->data);
   free(set);

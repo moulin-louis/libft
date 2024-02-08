@@ -18,6 +18,7 @@
 #include "io.h" // I/O FN prototype FN
 #include "s_list.h" //s_list definition + prototype FN
 #include "string.h" //string FN prototype
+#include "t_bTree.h" //t_bTree definition + prototype FN
 #include "t_hashTable.h" //t_hashTable/htItem defination + prototype FN
 #include "t_rb.h" //t_rb definition + prototype FN
 #include "t_set.h" //Set definition + prototype FN

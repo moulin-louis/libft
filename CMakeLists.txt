@@ -65,7 +65,9 @@ add_library(ft STATIC src/string/ft_atoi.c
         inc/memory.h
         inc/io.h
         inc/t_rb.h
-        src/t_rb/t_rb.c)
+        src/t_rb/t_rb.c
+        inc/t_bTree.h
+        src/t_bTree/t_bTree.c)
 
 add_compile_options(-g)
 add_executable(tester ./test.c)

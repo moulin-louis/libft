@@ -14,11 +14,11 @@ t_hashTable *ft_ht_new(void) {
   return result;
 }
 
-void ft_ht_clean(t_hashTable *ht, uint64_t (*free_fn)(t_htItem *item)) {
+void ft_ht_destroy(t_hashTable *ht, uint64_t (*free_fn)(t_htItem *item)) {
   if (free_fn)
     ft_ht_iterItem(ht, free_fn);
   ft_ht_cleanItems(ht);
-  ft_set_clean(ht);
+  ft_set_destroy(ht);
 }
 
 t_htItem *ft_ht_createItem(const void *key, const uint64_t nbytes_key, const void *data) {

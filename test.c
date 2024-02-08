@@ -1,10 +1,8 @@
 #include "./inc/libft.h"
 
 int main(void) {
-  t_rb* rb = ft_rb_new(NULL, sizeof(void*));
-  ft_rb_insert(rb, (void*)4);
-  ft_rb_insert(rb, (void*)2);
-  ft_rb_insert(rb, (void*)6);
-  ft_rb_print(rb->root, 0);
-  ft_rb_clean(rb);
+  t_bTree* b_tree = ft_bTree_new(sizeof(void*), NULL, NULL);
+  for (uint64_t i = 0; i < 10; ++i)
+    ft_bTree_insert(b_tree, (void *)i);
+  ft_bTree_destroy(b_tree);
 }

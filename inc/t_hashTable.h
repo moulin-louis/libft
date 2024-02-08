@@ -28,7 +28,7 @@ typedef t_set t_hashTable;
 
 t_hashTable* ft_ht_new(void);
 
-void ft_ht_clean(t_hashTable* ht, uint64_t (*free_fn)(t_htItem* item));
+void ft_ht_destroy(t_hashTable* ht, uint64_t (*free_fn)(t_htItem* item));
 
 t_htItem* ft_ht_createItem(const void* key, uint64_t nbytes_key, const void* data);
 
