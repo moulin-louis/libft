@@ -5,10 +5,10 @@
 #ifndef IO_H
 #define IO_H
 
-#include <stdint.h>
-#include <unistd.h>
-#include <sys/stat.h>
 #include <fcntl.h>
+#include <stdint.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "t_set.h"
 
 // I/O FN
@@ -23,4 +23,4 @@ void ft_putnbr_fd(int32_t n, int32_t fd);
 
 t_set* read_file(const char* path);
 
-#endif //IO_H
+#endif // IO_H

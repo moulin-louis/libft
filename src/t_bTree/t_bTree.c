@@ -6,13 +6,13 @@
 #include "libft.h"
 
 static t_btNode* ft_bTree_createNode(const void* data);
-static int  simple_cmp(const void* data1, const void* data2);
+static int simple_cmp(const void* data1, const void* data2);
 
 t_bTree* ft_bTree_new(const uint64_t nbytes_data, const t_cmp_fn cmp_fn, const t_free_fn free_fn) {
   t_bTree* b_tree = ft_calloc(1, sizeof(t_bTree));
   if (b_tree == NULL)
     return NULL;
-  b_tree->cmp_fn = cmp_fn ? cmp_fn :  simple_cmp;
+  b_tree->cmp_fn = cmp_fn ? cmp_fn : simple_cmp;
   b_tree->free_fn = free_fn;
   b_tree->nbytes_data = nbytes_data;
   return b_tree;
@@ -20,9 +20,19 @@ t_bTree* ft_bTree_new(const uint64_t nbytes_data, const t_cmp_fn cmp_fn, const t
 
 void ft_bTree_destroy(t_bTree* b_tree) {
   t_set* nodes = ft_set_new(sizeof(void*));
-  if (nodes == NULL)
+  if (nodes == NULL || b_tree->root == NULL)
     return;
-  ft_set_p
+  const t_btNode* node = NULL;
+  for (node = b_tree->root; node->left; node = node->left) {
+  }
+  while (node != NULL) {
+    ft_set_push(nodes, &node, sizeof(void*));
+    node = ft_bTree_inorderNext(node);
+  }
+  for (uint64_t i = 0; i < nodes->len; ++i) {
+    free(*(t_btNode**)ft_set_get(nodes, i));
+  }
+  ft_set_destroy(nodes);
   free(b_tree);
 }
 
@@ -72,20 +82,20 @@ const t_btNode* ft_bTree_get(const t_bTree* b_tree, const void* data) {
   return NULL;
 }
 
-const t_btNode* ft_bTree_inorderNext(const t_btNode* bt_node) {
-  const t_btNode* tmp = NULL;
-  if (bt_node->right != NULL) {
-    tmp = bt_node->right;
-    while (tmp->left != NULL)
-      tmp = tmp->left;
-    return tmp;
+const t_btNode* ft_bTree_inorderNext(const t_btNode* n) {
+  const t_btNode* p = NULL;
+  if (n->right != NULL) {
+    p = n->right;
+    while (p->left != NULL)
+      p = p->left;
+    return p;
   }
-  tmp = bt_node->parent;
-  while (tmp != NULL && bt_node != tmp->right) {
-    bt_node = tmp;
-    tmp = tmp->parent;
+  p = n->parent;
+  while (p != NULL && n == p->right) {
+    n = p;
+    p = p->parent;
   }
-  return NULL;
+  return p;
 }
 
 uint64_t ft_bTree_delete(t_bTree* b_tree, const void* data) {
@@ -93,6 +103,7 @@ uint64_t ft_bTree_delete(t_bTree* b_tree, const void* data) {
   if (node == NULL)
     return 1;
   if (node->left == NULL && node->right == NULL) {
+    node->parent->right == node ? (node->parent->right = NULL) : (node->parent->left = NULL);
     ft_bTree_destroyNode(b_tree->free_fn, node);
     return 0;
   }
@@ -112,13 +123,25 @@ uint64_t ft_bTree_delete(t_bTree* b_tree, const void* data) {
     ft_bTree_destroyNode(b_tree->free_fn, node);
     return 0;
   }
-  //Find the inorder successor of the node
-  //swap data
-  //delete inorder successor node
+  // Find the inorder successor of the node
+  // swap data
+  // delete inorder successor node
   return 0;
 }
 
-void  ft_bTree_swapData(t_btNode* node1, t_btNode* node2) {
+void ft_bTree_print(const t_btNode* root, uint64_t space) {
+  if (root == NULL)
+    return;
+  space += 10;
+  ft_bTree_print(root->right, space);
+  printf("\n");
+  for (uint64_t i = 10; i < space; i++)
+    printf(" ");
+  printf("%lu\n", (uint64_t)root->data);
+  ft_bTree_print(root->left, space);
+}
+
+void ft_bTree_swapData(t_btNode* node1, t_btNode* node2) {
   const void* tmp = node1->data;
   node1->data = node2->data;
   node2->data = tmp;
@@ -132,6 +155,4 @@ static t_btNode* ft_bTree_createNode(const void* data) {
   return bt_node;
 }
 
-static int  simple_cmp(const void* data1, const void* data2) {
-  return data1 - data2;
-}
+static int simple_cmp(const void* data1, const void* data2) { return data1 - data2; }

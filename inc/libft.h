@@ -13,9 +13,9 @@
 #ifndef LIBFT_H
 #define LIBFT_H
 
-#include "memory.h" //memory prototype FN
 #include "character.h" //character prototype FN
 #include "io.h" // I/O FN prototype FN
+#include "memory.h" //memory prototype FN
 #include "s_list.h" //s_list definition + prototype FN
 #include "string.h" //string FN prototype
 #include "t_bTree.h" //t_bTree definition + prototype FN
@@ -23,16 +23,16 @@
 #include "t_rb.h" //t_rb definition + prototype FN
 #include "t_set.h" //Set definition + prototype FN
 
-#include <stdint.h>
-#include <stdlib.h>
+#include <fcntl.h>
 #include <stdbool.h>
-#include <unistd.h>
+#include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <fcntl.h>
+#include <unistd.h>
 
-//OTHER FN
+// OTHER FN
 void ft_hexdump(const void* data, uint64_t nbytes, uint64_t row);
 
 #endif

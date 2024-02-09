@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-//Memory Manipulation FN
+// Memory Manipulation FN
 
 void* ft_memset(void* s, int32_t c, uint64_t n);
 
@@ -27,4 +27,4 @@ void* ft_calloc(uint64_t nmemb, uint64_t size);
 
 void ft_bzero(void* s, uint64_t n);
 
-#endif //MEMORY_H
+#endif // MEMORY_H

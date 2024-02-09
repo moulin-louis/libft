@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-//String FN
+// String FN
 char* ft_substr(char const* s, int32_t start, uint64_t len);
 
 char* ft_strrchr(const char* s, int32_t c);
@@ -46,4 +46,4 @@ char* ft_strmapi(char const* s, char (*f)(unsigned int32_t, char));
 
 void ft_striteri(char* s, void (*f)(unsigned int32_t, char*));
 
-#endif //STRING_H
+#endif // STRING_H

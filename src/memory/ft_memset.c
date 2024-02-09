@@ -13,13 +13,13 @@
 #include "../inc/libft.h"
 
 void* ft_memset(void* s, int c, uint64_t n) {
-	char* temp;
+  char* temp;
 
-	temp = s;
-	while (n) {
-		*temp = c;
-		temp++;
-		n--;
-	}
-	return (s);
+  temp = s;
+  while (n) {
+    *temp = c;
+    temp++;
+    n--;
+  }
+  return (s);
 }

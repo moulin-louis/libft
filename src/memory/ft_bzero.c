@@ -13,12 +13,12 @@
 #include "../../inc/libft.h"
 
 void ft_bzero(void* s, uint64_t n) {
-	char* temp;
+  char* temp;
 
-	temp = s;
-	while (n) {
-		*temp = 0;
-		temp++;
-		n--;
-	}
+  temp = s;
+  while (n) {
+    *temp = 0;
+    temp++;
+    n--;
+  }
 }

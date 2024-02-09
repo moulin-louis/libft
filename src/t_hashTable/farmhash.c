@@ -62,11 +62,13 @@
 // of a+b is easily derived from the hashes of a and b.  This property
 // doesn't hold for any hash functions in this file.
 
+#include "memory.h"
 #ifndef FARMHASH_H
 #define FARMHASH_H
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 struct uint128_t {
   uint64_t a;
@@ -158,30 +160,30 @@ uint128_t farmhash_fingerprint128(const char* s, size_t len);
 
 // This is intended to be a good fingerprinting primitive.
 // See below for more overloads.
-static inline uint64_t farmhash_fingerprint_uint128_t(uint128_t x) {
+// static inline uint64_t farmhash_fingerprint_uint128_t(uint128_t x) {
   // Murmur-inspired hashing.
-  const uint64_t k_mul = 0x9ddfea08eb382d69ULL;
-  uint64_t a = (uint128_t_low64(x) ^ uint128_t_high64(x)) * k_mul;
-  a ^= (a >> 47);
-  uint64_t b = (uint128_t_high64(x) ^ a) * k_mul;
-  b ^= (b >> 44);
-  b *= k_mul;
-  b ^= (b >> 41);
-  b *= k_mul;
-  return b;
-}
+  // const uint64_t k_mul = 0x9ddfea08eb382d69ULL;
+  // uint64_t a = (uint128_t_low64(x) ^ uint128_t_high64(x)) * k_mul;
+  // a ^= (a >> 47);
+  // uint64_t b = (uint128_t_high64(x) ^ a) * k_mul;
+  // b ^= (b >> 44);
+  // b *= k_mul;
+  // b ^= (b >> 41);
+  // b *= k_mul;
+  // return b;
+// }
 
 // This is intended to be a good fingerprinting primitive.
-static inline uint64_t farmhash_fingerprint_uint64_t(uint64_t x) {
+// static inline uint64_t farmhash_fingerprint_uint64_t(uint64_t x) {
   // Murmur-inspired hashing.
-  const uint64_t k_mul = 0x9ddfea08eb382d69ULL;
-  uint64_t b = x * k_mul;
-  b ^= (b >> 44);
-  b *= k_mul;
-  b ^= (b >> 41);
-  b *= k_mul;
-  return b;
-}
+  // const uint64_t k_mul = 0x9ddfea08eb382d69ULL;
+  // uint64_t b = x * k_mul;
+  // b ^= (b >> 44);
+  // b *= k_mul;
+  // b ^= (b >> 41);
+  // b *= k_mul;
+  // return b;
+// }
 
 #endif  // FARMHASH_H
 
@@ -275,6 +277,10 @@ static inline uint32_t bswap32(const uint32_t x) {
   return y;
 }
 
+void test() {
+  ft_memcpy(NULL, NULL, 0);
+}
+
 static inline uint64_t bswap64(const uint64_t x) {
   uint64_t y = x;
 
@@ -296,16 +302,17 @@ static inline uint64_t bswap64(const uint64_t x) {
   return y;
 }
 
+#include <string.h>
 static inline uint64_t fetch64(const char* p) {
   uint64_t result;
-  memcpy(&result, p, sizeof(result));
+  ft_memcpy(&result, p, sizeof(result));
 
   return uint64_t_in_expected_order(result);
 }
 
 static inline uint32_t fetch32(const char* p) {
   uint32_t result;
-  memcpy(&result, p, sizeof(result));
+  ft_memcpy(&result, p, sizeof(result));
 
   return uint32_t_in_expected_order(result);
 }

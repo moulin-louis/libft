@@ -13,20 +13,20 @@
 #include "../inc/libft.h"
 
 void* ft_memchr(const void* s, int c, uint64_t n) {
-	int i;
-	char* temp;
+  int i;
+  char* temp;
 
-	if (c > 0)
-		c = (char)c;
-	if (n == 0)
-		return (NULL);
-	i = 0;
-	temp = (char *)s;
-	while (i < (int)n) {
-		if (*temp == c)
-			return ((void *)temp);
-		i++;
-		temp++;
-	}
-	return (0);
+  if (c > 0)
+    c = (char)c;
+  if (n == 0)
+    return (NULL);
+  i = 0;
+  temp = (char*)s;
+  while (i < (int)n) {
+    if (*temp == c)
+      return (temp);
+    i++;
+    temp++;
+  }
+  return (0);
 }

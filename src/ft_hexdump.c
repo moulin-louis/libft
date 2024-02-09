@@ -7,7 +7,7 @@
 void ft_hexdump(const void* data, const uint64_t nbytes, const uint64_t row) {
   if (row == 0) {
     for (size_t i = 0; i < nbytes; i++) {
-      printf("%02x ", ((uint8_t *)data)[i]);
+      printf("%02x ", ((uint8_t*)data)[i]);
     }
     printf("\n");
     return;
@@ -17,7 +17,7 @@ void ft_hexdump(const void* data, const uint64_t nbytes, const uint64_t row) {
       if (j == nbytes) {
         break;
       }
-      printf("%02x ", ((uint8_t *)data)[j]);
+      printf("%02x ", ((uint8_t*)data)[j]);
     }
     printf("\n");
   }

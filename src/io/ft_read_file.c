@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-//Read the entire file into memory using a vector, return non-zero value if fail
+// Read the entire file into memory using a vector, return non-zero value if fail
 t_set* read_file(const char* path) {
   const int file = open(path, O_RDONLY);
   if (file == -1)
@@ -31,7 +31,7 @@ t_set* read_file(const char* path) {
     if (retval == 0)
       break;
     buff[retval] = 0;
-    if (ft_set_append(set, buff, retval + 1)) {
+    if (ft_set_push(set, buff, retval + 1)) {
       close(file);
       ft_set_destroy(set);
       return NULL;

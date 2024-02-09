@@ -13,6 +13,5 @@
 #include "../inc/libft.h"
 
 void ft_putchar_fd(char c, int fd) {
-	int _x = write(fd, &c, 1);
-	(void)_x;
+  write(fd, &c, 1);
 }

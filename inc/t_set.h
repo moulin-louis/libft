@@ -36,8 +36,7 @@ void* ft_set_get(const t_set* set, uint64_t idx);
 uint64_t ft_set_set(const t_set* set, uint64_t idx, const void* data, uint64_t nbytes_data);
 
 uint64_t ft_set_insert(t_set* set, const void* data, uint64_t idx);
-uint64_t ft_set_push(t_set* set, const void* data);
 
-uint64_t ft_set_append(t_set* set, const void* data, size_t len);
+uint64_t ft_set_push(t_set* set, const void* data, uint64_t len);
 
 #endif //T_SET_H

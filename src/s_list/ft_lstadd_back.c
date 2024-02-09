@@ -13,12 +13,12 @@
 #include "../inc/libft.h"
 
 void ft_lstadd_back(s_list** lst, s_list* new) {
-	s_list* temp;
+  s_list* temp;
 
-	if (!*lst)
-		*lst = new;
-	else {
-		temp = ft_lstlast(*lst);
-		temp->next = new;
-	}
+  if (!*lst)
+    *lst = new;
+  else {
+    temp = ft_lstlast(*lst);
+    temp->next = new;
+  }
 }

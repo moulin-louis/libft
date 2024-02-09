@@ -13,8 +13,8 @@
 #include "../inc/libft.h"
 
 void ft_lstdelone(s_list* lst, void (*del)(void*)) {
-	if (lst) {
-		del ? del(lst->data) : 0;
-		free(lst);
-	}
+  if (lst) {
+    del ? del(lst->data) : 0;
+    free(lst);
+  }
 }

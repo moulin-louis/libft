@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"../inc/libft.h"
+#include "../inc/libft.h"
 
 void ft_lstiter(s_list* lst, void (*f)(void*)) {
-	s_list* temp;
+  s_list* temp;
 
-	while (lst) {
-		temp = lst->next;
-		f(lst->data);
-		lst = temp;
-	}
+  while (lst) {
+    temp = lst->next;
+    f(lst->data);
+    lst = temp;
+  }
 }

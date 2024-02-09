@@ -45,6 +45,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <string.h>
 
 struct uint128_t {
   uint64_t a;

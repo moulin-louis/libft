@@ -13,10 +13,10 @@
 #include "libft.h"
 
 void clean_array(char** arr) {
-	int i;
+  int i;
 
-	i = -1;
-	while (arr[++i])
-		free(arr[i]);
-	free(arr);
+  i = -1;
+  while (arr[++i])
+    free(arr[i]);
+  free(arr);
 }

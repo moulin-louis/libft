@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-//Character FN
+// Character FN
 
 int32_t ft_isprint(int32_t c);
 
@@ -23,4 +23,4 @@ char ft_tolower(char c);
 
 int32_t ft_toupper(int32_t c);
 
-#endif //CHARACTER_H
+#endif // CHARACTER_H

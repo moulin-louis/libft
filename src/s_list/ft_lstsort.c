@@ -2,9 +2,9 @@
 // Created by loumouli on 11/26/23.
 //
 
-#include "libft.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include "libft.h"
 
 void ft_lstsort(s_list* head, int (*cmp_fn)(const void*, const void*)) {
   if (cmp_fn == NULL || head == NULL)

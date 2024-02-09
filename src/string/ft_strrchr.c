@@ -13,20 +13,20 @@
 #include "../../inc/libft.h"
 
 char* ft_strrchr(const char* s, int c) {
-	int x;
+  int x;
 
-	x = 0;
-	if (c > 0)
-		c = (char)c;
-	while (*s) {
-		s++;
-		x++;
-	}
-	while (x >= 0) {
-		if (*s == c)
-			return ((char *)s);
-		s--;
-		x--;
-	}
-	return (0);
+  x = 0;
+  if (c > 0)
+    c = (char)c;
+  while (*s) {
+    s++;
+    x++;
+  }
+  while (x >= 0) {
+    if (*s == c)
+      return ((char*)s);
+    s--;
+    x--;
+  }
+  return (0);
 }
