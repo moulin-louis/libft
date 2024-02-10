@@ -72,10 +72,6 @@ uint64_t ft_set_insert(t_set* set, const void* data, const uint64_t idx) {
   return 0;
 }
 
-// uint64_t ft_set_push(t_set* set, const void* data) {
-// return ft_set_insert(set, data, set->len + 1);
-// }
-
 uint64_t ft_set_push(t_set* set, const void* data, uint64_t len) {
   if (set->capacity < set->len + len / set->nbytes_data) {
     if (ft_set_reserve(set, (set->capacity + len / set->nbytes_data) * 2))
@@ -83,5 +79,14 @@ uint64_t ft_set_push(t_set* set, const void* data, uint64_t len) {
   }
   ft_memcpy(set->data + set->len * set->nbytes_data, data, len);
   set->len += (len / set->nbytes_data);
+  return 0;
+}
+
+uint64_t ft_set_iter(const t_set* set, uint64_t (*iter_fn)(void*)) {
+  for (uint64_t idx = 0; idx < set->len; ++idx) {
+    const uint64_t retval = iter_fn(ft_set_get(set, idx));
+    if (retval)
+      return retval;
+  }
   return 0;
 }

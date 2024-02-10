@@ -6,7 +6,6 @@ int main(void) {
   ft_bTree_insert(b_tree, (void*)5);
   ft_bTree_insert(b_tree, (void*)0);
   ft_bTree_insert(b_tree, (void*)10);
-  // ft_bTree_insert(b_tree, (void *)5);
   ft_bTree_print(b_tree->root, 0);
   ft_bTree_destroy(b_tree);
 }

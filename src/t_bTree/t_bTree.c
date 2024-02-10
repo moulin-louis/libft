@@ -19,19 +19,18 @@ t_bTree* ft_bTree_new(const uint64_t nbytes_data, const t_cmp_fn cmp_fn, const t
 }
 
 void ft_bTree_destroy(t_bTree* b_tree) {
-  t_set* nodes = ft_set_new(sizeof(void*));
-  if (nodes == NULL || b_tree->root == NULL)
+  if (b_tree->root == NULL) {
+    free(b_tree);
     return;
-  const t_btNode* node = NULL;
-  for (node = b_tree->root; node->left; node = node->left) {
   }
-  while (node != NULL) {
+  t_set* nodes = ft_set_new(sizeof(void*));
+  if (nodes == NULL)
+    return;
+  const t_btNode* node = ft_bTree_getMin(b_tree);
+  for (; node; node = ft_bTree_inorderNext(node))
     ft_set_push(nodes, &node, sizeof(void*));
-    node = ft_bTree_inorderNext(node);
-  }
-  for (uint64_t i = 0; i < nodes->len; ++i) {
-    free(*(t_btNode**)ft_set_get(nodes, i));
-  }
+  for (uint64_t i = 0; i < nodes->len; ++i)
+    ft_bTree_destroyNode(b_tree->free_fn, *(t_btNode**)ft_set_get(nodes, i));
   ft_set_destroy(nodes);
   free(b_tree);
 }
@@ -82,6 +81,24 @@ const t_btNode* ft_bTree_get(const t_bTree* b_tree, const void* data) {
   return NULL;
 }
 
+const t_btNode* ft_bTree_getMin(const t_bTree* b_tree) {
+  if (b_tree->root == NULL)
+    return NULL;
+  const t_btNode* x = b_tree->root;
+  for (; x->left; x = x->left) {
+  }
+  return x;
+}
+
+const t_btNode* ft_bTree_getMax(const t_bTree* b_tree) {
+  if (b_tree->root == NULL)
+    return NULL;
+  const t_btNode* x = b_tree->root;
+  for (; x->left; x = x->right) {
+  }
+  return x;
+}
+
 const t_btNode* ft_bTree_inorderNext(const t_btNode* n) {
   const t_btNode* p = NULL;
   if (n->right != NULL) {
@@ -98,35 +115,49 @@ const t_btNode* ft_bTree_inorderNext(const t_btNode* n) {
   return p;
 }
 
-uint64_t ft_bTree_delete(t_bTree* b_tree, const void* data) {
+void ft_bTree_delete(t_bTree* b_tree, const void* data) {
   t_btNode* node = (t_btNode*)ft_bTree_get(b_tree, data);
   if (node == NULL)
-    return 1;
+    return;
+  ft_bTree_deleteNode(b_tree, node);
+}
+
+void ft_bTree_deleteNode(t_bTree* b_tree, t_btNode* node) {
+  if (node == NULL)
+    return;
   if (node->left == NULL && node->right == NULL) {
-    node->parent->right == node ? (node->parent->right = NULL) : (node->parent->left = NULL);
+    if (node->parent)
+      node->parent->right == node ? (node->parent->right = NULL) : (node->parent->left = NULL);
+    else
+      b_tree->root = NULL;
     ft_bTree_destroyNode(b_tree->free_fn, node);
-    return 0;
+    return;
   }
-  if (node->left == NULL && node->right != NULL) {
+  if (node->left == NULL) {
     if (node->parent == NULL)
       b_tree->root = node->right;
     else
       node->parent = node->right;
     ft_bTree_destroyNode(b_tree->free_fn, node);
-    return 0;
+    return;
   }
-  if (node->left != NULL && node->right == NULL) {
-    if (node->parent == NULL)
+  if (node->right == NULL) {
+    if (node->parent == NULL) {
       b_tree->root = node->left;
+      b_tree->root->parent = NULL;
+    }
     else
       node->parent = node->left;
     ft_bTree_destroyNode(b_tree->free_fn, node);
-    return 0;
+    return;
   }
   // Find the inorder successor of the node
+  t_btNode* next_node = (t_btNode*)ft_bTree_inorderNext(node); // Cant be NULL cause we check all other conditions
   // swap data
+  ft_bTree_swapData(node, next_node);
   // delete inorder successor node
-  return 0;
+  ft_bTree_deleteNode(b_tree, next_node);
+  // ft_bTree_destroyNode(b_tree->free_fn, next_node);
 }
 
 void ft_bTree_print(const t_btNode* root, uint64_t space) {

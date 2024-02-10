@@ -33,6 +33,8 @@
 #include <unistd.h>
 
 // OTHER FN
+
+// hexdump a given array, will put a '\n' every row
 void ft_hexdump(const void* data, uint64_t nbytes, uint64_t row);
 
 #endif

@@ -43,19 +43,28 @@ void ft_bTree_destroyNode(t_free_fn free_fn, t_btNode* bt_node);
 uint64_t ft_bTree_insert(t_bTree* b_tree, const void* data);
 
 // Check if the Binary Tree has this data
-// Data must be the same size of nbytes_data
+// Data must be the same size as nbytes_data
 bool ft_bTree_has(const t_bTree* b_tree, const void* data);
 
 // Will return a pointer to the node that contain data, NULL otherwise
-// Data must be the same size of nbytes_data
+// Data must be the same size as nbytes_data
 const t_btNode* ft_bTree_get(const t_bTree* b_tree, const void* data);
+
+// Will return a pointer to the node that contain the minimun data of the tree
+const t_btNode* ft_bTree_getMin(const t_bTree* b_tree);
+
+// Will return a pointer to the node that contain the maximum data of the tree
+const t_btNode* ft_bTree_getMax(const t_bTree* b_tree);
 
 // Will return the next inorder node or NULL
 const t_btNode* ft_bTree_inorderNext(const t_btNode* n);
 
 // Delete a value in the Binary Tree, will use the cmp_fn to find the correct node
-// Data must be the same size of nbytes_data
-uint64_t ft_bTree_delete(t_bTree* b_tree, const void* data);
+// Data must be the same size as nbytes_data
+void ft_bTree_delete(t_bTree* b_tree, const void* data);
+
+// Delete a given node in the Binary Tree
+void ft_bTree_deleteNode(t_bTree* b_tree, t_btNode* node);
 
 // Will swap the data of two node
 void ft_bTree_swapData(t_btNode* node1, t_btNode* node2);
