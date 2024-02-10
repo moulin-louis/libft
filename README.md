@@ -11,8 +11,8 @@ implementing and learning to use them.
   - Dynamic Array            : std::vector         : (t_set)
   - HashTable                :  std::unordered_map : t_hashTable
   - Binary Search Tree (BST) : None                : t_bTree
-  - Red/Black Trees          : std::map            : t_rb
+  - Red/Black Trees(WIP)     : std::map            : t_rb
   - Single Linked List       : std::forward_list   : t_sList
-  - Double Linked List       : std::list           : t_dList
+  - Double Linked List(WIP)  : std::list           : t_dList
 ## Note:
 - 125/100
