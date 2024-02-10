@@ -40,18 +40,18 @@ add_library(ft STATIC src/string/ft_atoi.c
         src/io/ft_putstr_fd.c
         src/io/ft_putendl_fd.c
         src/io/ft_putnbr_fd.c
-        src/s_list/ft_lstadd_back.c
-        src/s_list/ft_lstadd_front.c
-        src/s_list/ft_lstclear.c
-        src/s_list/ft_lstdelone.c
-        src/s_list/ft_lstiter.c
-        src/s_list/ft_lstlast.c
-        src/s_list/ft_lstmap.c
-        src/s_list/ft_lstnew.c
-        src/s_list/ft_lstsize.c
+        src/t_sList/ft_lstadd_back.c
+        src/t_sList/ft_lstadd_front.c
+        src/t_sList/ft_lstclear.c
+        src/t_sList/ft_lstdelone.c
+        src/t_sList/ft_lstiter.c
+        src/t_sList/ft_lstlast.c
+        src/t_sList/ft_lstmap.c
+        src/t_sList/ft_lstnew.c
+        src/t_sList/ft_lstsize.c
         src/string/clean_split.c
-        src/s_list/ft_lstfilter.c
-        src/s_list/ft_lstsort.c
+        src/t_sList/ft_lstfilter.c
+        src/t_sList/ft_lstsort.c
         src/io/ft_read_file.c
         src/t_set/t_set.c
         src/t_hashTable/t_hashTable.c
@@ -59,7 +59,7 @@ add_library(ft STATIC src/string/ft_atoi.c
         src/t_hashTable/farmhash.c
         inc/t_hashTable.h
         inc/t_set.h
-        inc/s_list.h
+        inc/t_sList.h
         inc/character.h
         inc/string.h
         inc/memory.h

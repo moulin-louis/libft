@@ -6,11 +6,11 @@
 #include <stdio.h>
 #include "libft.h"
 
-void ft_lstsort(s_list* head, int (*cmp_fn)(const void*, const void*)) {
+void ft_lstsort(t_sList* head, int (*cmp_fn)(const void*, const void*)) {
   if (cmp_fn == NULL || head == NULL)
     return;
   bool swapped = false;
-  s_list* ptr;
+  t_sList* ptr;
   void* temp;
   do {
     swapped = false;

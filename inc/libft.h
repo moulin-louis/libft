@@ -16,11 +16,11 @@
 #include "character.h" //character prototype FN
 #include "io.h" // I/O FN prototype FN
 #include "memory.h" //memory prototype FN
-#include "s_list.h" //s_list definition + prototype FN
 #include "string.h" //string FN prototype
 #include "t_bTree.h" //t_bTree definition + prototype FN
 #include "t_hashTable.h" //t_hashTable/htItem defination + prototype FN
 #include "t_rb.h" //t_rb definition + prototype FN
+#include "t_sList.h" //s_list definition + prototype FN
 #include "t_set.h" //Set definition + prototype FN
 
 #include <fcntl.h>

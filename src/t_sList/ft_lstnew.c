@@ -12,10 +12,10 @@
 
 #include "../inc/libft.h"
 
-s_list* ft_lstnew(void* content) {
-  s_list* result;
+t_sList* ft_lstnew(void* content) {
+  t_sList* result;
 
-  result = malloc(sizeof(s_list));
+  result = malloc(sizeof(t_sList));
   if (!result)
     return (NULL);
   result->data = content;

@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: loumouli <loumouli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/09 12:03:14 by loumouli          #+#    #+#             */
-/*   Updated: 2022/05/11 14:49:47 by loumouli         ###   ########.fr       */
+/*   Created: 2022/05/09 11:33:03 by loumouli          #+#    #+#             */
+/*   Updated: 2022/05/11 13:20:57 by loumouli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/libft.h"
 
-s_list* ft_lstlast(s_list* lst) {
-  if (lst == NULL)
+int ft_lstsize(t_sList* lst) {
+  int result;
+  t_sList* lst_temp;
+
+  lst_temp = lst;
+  result = 0;
+  if (!lst)
     return (0);
-  while (lst) {
-    if (lst->next == NULL)
-      return (lst);
-    lst = lst->next;
+  if (lst_temp->next == NULL)
+    return (1);
+  while (lst_temp->next) {
+    lst_temp = lst_temp->next;
+    result++;
   }
-  return (lst);
+  result++;
+  return (result);
 }
