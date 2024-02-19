@@ -4,7 +4,7 @@ project(ft C)
 include_directories(./inc)
 add_compile_options(-Wall -Werror -Wextra -g -mavx -msse2 -msse4.2 -march=native -fno-builtin)
 
-add_library(ft STATIC src/string/ft_atoi.c
+add_library(ft STATIC src/strings/ft_atoi.c
         src/memory/ft_calloc.c
         src/character/ft_isascii.c
         src/memory/ft_bzero.c
@@ -17,25 +17,25 @@ add_library(ft STATIC src/string/ft_atoi.c
         src/memory/ft_memcpy.c
         src/memory/ft_memcpy_avx.c
         src/memory/ft_memcpy_x86.c
-        src/string/ft_strdup.c
+        src/strings/ft_strdup.c
         src/memory/ft_memmove.c
         src/memory/ft_memset.c
-        src/string/ft_strchr.c
-        src/string/ft_strlcat.c
-        src/string/ft_strlcpy.c
-        src/string/ft_strlen.c
-        src/string/ft_strncmp.c
-        src/string/ft_strnstr.c
-        src/string/ft_strrchr.c
+        src/strings/ft_strchr.c
+        src/strings/ft_strlcat.c
+        src/strings/ft_strlcpy.c
+        src/strings/ft_strlen.c
+        src/strings/ft_strncmp.c
+        src/strings/ft_strnstr.c
+        src/strings/ft_strrchr.c
         src/character/ft_tolower.c
         src/character/ft_toupper.c
-        src/string/ft_substr.c
-        src/string/ft_strjoin.c
-        src/string/ft_strtrim.c
-        src/string/ft_split.c
-        src/string/ft_itoa.c
-        src/string/ft_strmapi.c
-        src/string/ft_striteri.c
+        src/strings/ft_substr.c
+        src/strings/ft_strjoin.c
+        src/strings/ft_strtrim.c
+        src/strings/ft_split.c
+        src/strings/ft_itoa.c
+        src/strings/ft_strmapi.c
+        src/strings/ft_striteri.c
         src/io/ft_putchar_fd.c
         src/io/ft_putstr_fd.c
         src/io/ft_putendl_fd.c
@@ -49,7 +49,7 @@ add_library(ft STATIC src/string/ft_atoi.c
         src/t_sList/ft_lstmap.c
         src/t_sList/ft_lstnew.c
         src/t_sList/ft_lstsize.c
-        src/string/clean_split.c
+        src/strings/clean_split.c
         src/t_sList/ft_lstfilter.c
         src/t_sList/ft_lstsort.c
         src/io/ft_read_file.c
@@ -61,7 +61,7 @@ add_library(ft STATIC src/string/ft_atoi.c
         inc/t_set.h
         inc/t_sList.h
         inc/character.h
-        inc/string.h
+        inc/strings.h
         inc/memory.h
         inc/io.h
         inc/t_rb.h

@@ -66,9 +66,9 @@
 #ifndef FARMHASH_H
 #define FARMHASH_H
 
-#include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
+#include <stdlib.h>
+#include <strings.h>
 
 struct uint128_t {
   uint64_t a;
@@ -187,7 +187,7 @@ uint128_t farmhash_fingerprint128(const char* s, size_t len);
 
 #endif  // FARMHASH_H
 
-#include <string.h>
+#include <strings.h>
 
 #include <assert.h>
 
@@ -302,7 +302,7 @@ static inline uint64_t bswap64(const uint64_t x) {
   return y;
 }
 
-#include <string.h>
+#include <strings.h>
 static inline uint64_t fetch64(const char* p) {
   uint64_t result;
   ft_memcpy(&result, p, sizeof(result));
