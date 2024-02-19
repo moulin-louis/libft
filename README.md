@@ -10,7 +10,7 @@ implementing and learning to use them.
   - Known Name               : C++ equivalent      : my type name
   - Dynamic Array            : std::vector         : (t_set)
   - HashTable                :  std::unordered_map : t_hashTable
-  - Binary Search Tree (BST) : None                : t_bTree
+  - Binary Search Tree       : None                : t_bTree
   - Red/Black Trees(WIP)     : std::map            : t_rb
   - Single Linked List       : std::forward_list   : t_sList
   - Double Linked List(WIP)  : std::list           : t_dList
