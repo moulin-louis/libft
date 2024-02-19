@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/libft.h"
+#include "libft.h"
 
 t_sList* ft_lstmap(t_sList* lst, void* (*f)(void*), void (*del)(void*)) {
   t_sList* result;

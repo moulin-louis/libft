@@ -2,8 +2,6 @@
 // Created by loumouli on 11/26/23.
 //
 
-#include <stdbool.h>
-#include <stdio.h>
 #include "libft.h"
 
 void ft_lstsort(t_sList* head, int (*cmp_fn)(const void*, const void*)) {

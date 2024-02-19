@@ -4,7 +4,17 @@ project(ft C)
 include_directories(./inc)
 add_compile_options(-Wall -Werror -Wextra -g -mavx -msse2 -msse4.2 -march=native -fno-builtin)
 
-add_library(ft STATIC src/strings/ft_atoi.c
+add_library(ft STATIC
+        inc/t_hashTable.h
+        inc/t_set.h
+        inc/t_sList.h
+        inc/character.h
+        inc/strings.h
+        inc/memory.h
+        inc/io.h
+        inc/t_rb.h
+        inc/t_bTree.h
+        src/strings/ft_atoi.c
         src/memory/ft_calloc.c
         src/character/ft_isascii.c
         src/memory/ft_bzero.c
@@ -55,20 +65,10 @@ add_library(ft STATIC src/strings/ft_atoi.c
         src/io/ft_read_file.c
         src/t_set/t_set.c
         src/t_hashTable/t_hashTable.c
-        ./src/ft_hexdump.c
+        src/ft_hexdump.c
         src/t_hashTable/farmhash.c
-        inc/t_hashTable.h
-        inc/t_set.h
-        inc/t_sList.h
-        inc/character.h
-        inc/strings.h
-        inc/memory.h
-        inc/io.h
-        inc/t_rb.h
         src/t_rb/t_rb.c
-        inc/t_bTree.h
         src/t_bTree/t_bTree.c)
 
-add_compile_options(-g)
 add_executable(tester ./test.c)
 target_link_libraries(tester ft)

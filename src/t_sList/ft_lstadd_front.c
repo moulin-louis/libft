@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include "../inc/libft.h"
+#include "libft.h"
 
 void ft_lstadd_front(t_sList** lst, t_sList* new) {
   new->next = *lst;

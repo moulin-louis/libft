@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libft.h"
+#include "libft.h"
 
 void* ft_calloc(uint64_t nmemb, uint64_t size) {
   void* result;

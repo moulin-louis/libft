@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/libft.h"
+#include "libft.h"
 
 void* ft_memmove(void* dest, const void* src, uint64_t n) {
   char* s;

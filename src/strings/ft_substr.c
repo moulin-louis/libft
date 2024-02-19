@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/libft.h"
+#include "libft.h"
 
 static int ft_count_malloc(char* s, unsigned int start, size_t len) {
   if (start > len || start > ft_strlen(s))
