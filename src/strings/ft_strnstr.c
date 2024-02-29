@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+#ifdef FT_BUILTIN
 char* ft_strnstr(const char* big, const char* little, size_t len) {
   int count;
   int start;
@@ -36,3 +37,4 @@ char* ft_strnstr(const char* big, const char* little, size_t len) {
   }
   return (NULL);
 }
+#endif

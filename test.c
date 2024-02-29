@@ -1,11 +1,20 @@
 #include "./inc/libft.h"
 
-int main(void) {
-  t_bTree* b_tree = ft_bTree_new(sizeof(void*), NULL, NULL);
 
-  ft_bTree_insert(b_tree, (void*)5);
-  ft_bTree_insert(b_tree, (void*)0);
-  ft_bTree_insert(b_tree, (void*)10);
-  ft_bTree_print(b_tree->root, 0);
-  ft_bTree_destroy(b_tree);
+typedef void(^block_fn)(void);
+
+block_fn foo(void) {
+  int x = 42;
+  void (^lbd)(void) = ^{
+    printf("x = %d", x);
+  };
+  lbd();
+  return lbd;
+}
+
+int main(void) {
+  //call foo with a clang lambda/block
+  block_fn lbd = foo();
+  (void)lbd;
+  // lbd();
 }

@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+#ifdef FT_BUILTIN
 static int ft_is_wp(char c) {
   if (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r')
     return (1);
@@ -39,3 +40,4 @@ int ft_atoi(const char* nptr) {
   result = result * minus;
   return (result);
 }
+#endif

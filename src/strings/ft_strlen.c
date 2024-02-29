@@ -12,8 +12,8 @@
 
 #include "libft.h"
 
-#include <stdlib.h>
-#include <strings.h>
+#ifdef FT_BUILTIN
+
 /* Return the length of the null-terminated string STR.  Scan for
    the null terminator quickly by testing four bytes at a time.  */
 inline size_t ft_strlen(const char* str) {
@@ -73,3 +73,4 @@ inline size_t ft_strlen(const char* str) {
     }
   }
 }
+#endif

@@ -2,6 +2,8 @@
 
 #include "libft.h"
 
+
+#ifdef FT_BUILTIN
 void* ft_memcpy(void* dest, const void* src, uint64_t n) {
   char* d;
   const char* s;
@@ -24,3 +26,4 @@ void* ft_memcpy(void* dest, const void* src, uint64_t n) {
   }
   return (dest);
 }
+#endif

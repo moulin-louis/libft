@@ -1,8 +1,24 @@
 cmake_minimum_required(VERSION 3.22)
 project(ft C)
 
+#use C23
+set(CMAKE_C_STANDARD 23)
+add_compile_options(-std=c23)
+
+#add include directories
 include_directories(./inc)
-add_compile_options(-Wall -Werror -Wextra -g -mavx -msse2 -msse4.2 -march=native -fno-builtin)
+
+#add compile options
+add_compile_options(-Wall -Werror -Wextra -gdwarf-4 -mavx -msse2 -msse4.2 -march=native)
+
+#add support to clang blocks
+add_compile_options(-fblocks)
+add_link_options(-lBlocksRuntime)
+
+#add builtin option
+if (DEFINED ENV{FT_BUILTIN})
+    add_compile_options(-DFT_BUILTIN=1)
+endif ()
 
 add_library(ft STATIC
         inc/t_hashTable.h
@@ -25,8 +41,6 @@ add_library(ft STATIC
         src/memory/ft_memchr.c
         src/memory/ft_memcmp.c
         src/memory/ft_memcpy.c
-        src/memory/ft_memcpy_avx.c
-        src/memory/ft_memcpy_x86.c
         src/strings/ft_strdup.c
         src/memory/ft_memmove.c
         src/memory/ft_memset.c
