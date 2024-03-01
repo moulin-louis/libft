@@ -1,20 +1,16 @@
 #include "./inc/libft.h"
 
-
 typedef void(^block_fn)(void);
 
-block_fn foo(void) {
-  int x = 42;
-  void (^lbd)(void) = ^{
-    printf("x = %d", x);
-  };
+void foo(block_fn lbd) {
   lbd();
-  return lbd;
 }
 
 int main(void) {
   //call foo with a clang lambda/block
-  block_fn lbd = foo();
-  (void)lbd;
-  // lbd();
+  int x = 42;
+  auto lbd = ^(void) {
+    printf("%d\n", x);
+  };
+  foo(lbd);
 }

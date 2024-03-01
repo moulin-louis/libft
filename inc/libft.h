@@ -16,7 +16,7 @@
 #include "character.h" //character prototype FN
 #include "io.h" // I/O FN prototype FN
 #include "memory.h" //memory prototype FN
-#include "string.h" //string FN prototype
+#include "strings.h" //string FN prototype
 #include "t_bTree.h" //t_bTree definition + prototype FN
 #include "t_hashTable.h" //t_hashTable/htItem defination + prototype FN
 #include "t_rb.h" //t_rb definition + prototype FN
@@ -48,8 +48,6 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-
-// OTHER FN
 
 // hexdump a given array, will put a '\n' every row
 void ft_hexdump(const void* data, uint64_t nbytes, uint64_t row);
