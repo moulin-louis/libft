@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+#ifdef FT_BUILTIN
 size_t ft_strlcpy(char* dest, const char* src, size_t size) {
   unsigned int i;
 
@@ -26,3 +27,4 @@ size_t ft_strlcpy(char* dest, const char* src, size_t size) {
     i++;
   return (i);
 }
+#endif

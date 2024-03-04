@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+#ifdef FT_BUILTIN
 void* ft_memchr(const void* s, int c, uint64_t n) {
   int i;
   char* temp;
@@ -30,3 +31,4 @@ void* ft_memchr(const void* s, int c, uint64_t n) {
   }
   return (0);
 }
+#endif

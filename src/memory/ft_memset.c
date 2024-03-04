@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+#ifdef FT_BUILTIN
 void* ft_memset(void* s, int c, uint64_t n) {
   char* temp;
 
@@ -23,3 +24,4 @@ void* ft_memset(void* s, int c, uint64_t n) {
   }
   return (s);
 }
+#endif

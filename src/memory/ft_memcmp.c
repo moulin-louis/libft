@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+#ifdef FT_BUILTIN
 int ft_memcmp(const void* s1, const void* s2, uint64_t n) {
   char* temp1;
   char* temp2;
@@ -27,3 +28,4 @@ int ft_memcmp(const void* s1, const void* s2, uint64_t n) {
   }
   return ((unsigned char)*temp1 - (unsigned char)*temp2);
 }
+#endif

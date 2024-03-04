@@ -68,7 +68,7 @@
 
 #include <stdint.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 
 struct uint128_t {
   uint64_t a;
@@ -277,10 +277,6 @@ static inline uint32_t bswap32(const uint32_t x) {
   return y;
 }
 
-void test() {
-  ft_memcpy(NULL, NULL, 0);
-}
-
 static inline uint64_t bswap64(const uint64_t x) {
   uint64_t y = x;
 
@@ -302,17 +298,16 @@ static inline uint64_t bswap64(const uint64_t x) {
   return y;
 }
 
-#include <strings.h>
 static inline uint64_t fetch64(const char* p) {
   uint64_t result;
-  ft_memcpy(&result, p, sizeof(result));
+  memcpy(&result, p, sizeof(result));
 
   return uint64_t_in_expected_order(result);
 }
 
 static inline uint32_t fetch32(const char* p) {
   uint32_t result;
-  ft_memcpy(&result, p, sizeof(result));
+  memcpy(&result, p, sizeof(result));
 
   return uint32_t_in_expected_order(result);
 }

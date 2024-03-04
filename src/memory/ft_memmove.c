@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+#ifdef FT_BUILTIN
 void* ft_memmove(void* dest, const void* src, uint64_t n) {
   char* s;
   char* d;
@@ -33,3 +34,4 @@ void* ft_memmove(void* dest, const void* src, uint64_t n) {
   }
   return (dest);
 }
+#endif

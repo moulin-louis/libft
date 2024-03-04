@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+#ifdef FT_BUILTIN
 int ft_strncmp(const char* s1, const char* s2, size_t n) {
   unsigned int i;
 
@@ -49,3 +50,4 @@ int ft_strncmp_map(const char* s1, const char* s2, size_t n, char (*map)(char)) 
     i++;
   return (map(s1[i]) - map(s2[i]));
 }
+#endif

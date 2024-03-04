@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+#ifdef FT_BUILTIN
 char* ft_strrchr(const char* s, int c) {
   int x;
 
@@ -30,3 +31,4 @@ char* ft_strrchr(const char* s, int c) {
   }
   return (0);
 }
+#endif
