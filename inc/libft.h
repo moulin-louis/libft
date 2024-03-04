@@ -24,20 +24,20 @@
 #include "t_set.h" //Set definition + prototype FN
 
 #ifndef FT_BUILTIN
-#define ft_memset(dest, src, size) __builtin_memset(dest, src, size)
-#define ft_memcpy(dest, src, size) __builtin_memcpy(dest, src, size)
-#define ft_memmove(dest, src, size) __builtin_memmove(dest, src, size)
-#define ft_memchr(dest, src, size) __builtin_memchr(dest, src, size)
-#define ft_memcmp(dest, src, size) __builtin_memcmp(dest, src, size)
-#define ft_strlen(str) __builtin_strlen(str)
-#define ft_strlcpy(dest, src, size) __builtin_strlcpy(dest, src, size)
-#define ft_strlcat(dest, src, size) __builtin_strlcat(dest, src, size)
-#define ft_strchr(str, c) __builtin_strchr(str, c)
-#define ft_strrchr(str, c) __builtin_strrchr(str, c)
-#define ft_strnstr(dest, src, size) __builtin_strnstr(dest, src, size)
-#define ft_strncmp(dest, src, size) __builtin_strncmp(dest, src, size)
-#define ft_atoi(str) __builtin_atoi(str)
-#define ft_strdup(str) __builtin_strdup(str)
+#define ft_memset(dest, src, size) memset(dest, src, size)
+#define ft_memcpy(dest, src, size) memcpy(dest, src, size)
+#define ft_memmove(dest, src, size) memmove(dest, src, size)
+#define ft_memchr(dest, src, size) memchr(dest, src, size)
+#define ft_memcmp(dest, src, size) memcmp(dest, src, size)
+#define ft_strlen(str) strlen(str)
+#define ft_strlcpy(dest, src, size) strlcpy(dest, src, size)
+#define ft_strlcat(dest, src, size) strlcat(dest, src, size)
+#define ft_strchr(str, c) strchr(str, c)
+#define ft_strrchr(str, c) strrchr(str, c)
+#define ft_strnstr(dest, src, size) strnstr(dest, src, size)
+#define ft_strncmp(dest, src, size) strncmp(dest, src, size)
+#define ft_atoi(str) atoi(str)
+#define ft_strdup(str) strdup(str)
 #endif
 
 #include <fcntl.h>
