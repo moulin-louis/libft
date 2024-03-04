@@ -11,10 +11,6 @@ include_directories(./inc)
 #add compile options
 add_compile_options(-Wall -Werror -Wextra -gdwarf-4 -mavx -msse2 -msse4.2 -march=native)
 
-#add support to clang blocks
-add_compile_options(-fblocks)
-add_link_options(-lBlocksRuntime)
-
 #add builtin option
 if (DEFINED ENV{FT_BUILTIN})
     add_compile_options(-DFT_BUILTIN=1)

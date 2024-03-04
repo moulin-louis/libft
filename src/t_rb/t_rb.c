@@ -76,7 +76,7 @@ static void ft_rb_treeFixViolation(t_rb* rb, t_rbNode* node) {
       if (u->color == RED) {
         u->color = BLACK;
         node->parent->color = BLACK;
-        node->parent->parent = RED;
+        node->parent->parent->color = RED;
         node = node->parent->parent;
       }
       else {
