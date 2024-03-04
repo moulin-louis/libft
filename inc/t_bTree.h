@@ -22,7 +22,6 @@ typedef struct s_btNode {
 
 // Struct for the binary tree
 typedef struct {
-  uint64_t nbytes_data; // number of bytes of the data
   t_cmp_fn cmp_fn; // cmp_fn used to navigate the tree
   t_free_fn free_fn; // free_fn called on data when deleting a node
   t_btNode* root; // root node of the tree
@@ -31,16 +30,19 @@ typedef struct {
 // Red/Black Trees FN
 
 // Init a binary tree on the heap
-t_bTree* ft_bTree_new(uint64_t nbytes_data, t_cmp_fn cmp_fn, t_free_fn free_fn);
+t_bTree* ft_bTree_new(t_cmp_fn cmp_fn, t_free_fn free_fn);
 
 // Free all node and the t_bTree struct
 void ft_bTree_destroy(t_bTree* b_tree);
 
 // Free a single node of the binary tree
-void ft_bTree_destroyNode(t_free_fn free_fn, t_btNode* bt_node);
+void ft_bTree_destroyNode(t_btNode* bt_node, t_free_fn free_fn);
 
 // Insert a data into the Binary Tree
 uint64_t ft_bTree_insert(t_bTree* b_tree, const void* data);
+
+// Insert a node into the Binary Tree
+void ft_bTree_insertNode(t_bTree* b_tree, t_btNode* bt_node);
 
 // Check if the Binary Tree has this data
 // Data must be the same size as nbytes_data
@@ -76,5 +78,5 @@ uint64_t ft_bTree_iterItem(const t_bTree* b_tree, uint64_t (*iter_fn)(const t_bt
 void ft_bTree_print(const t_btNode* root, uint64_t space);
 
 // Apply a print function to all Binary Tree node in order
-void ft_bTree_printFn(const t_bTree* b_tree, void (*print_data)(const void* data));
+void ft_bTree_printFn(const t_btNode* root, uint64_t space, void (*print_data)(const void* data));
 #endif // T_BTREE_H

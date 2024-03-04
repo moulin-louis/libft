@@ -5,30 +5,34 @@
 #include "t_rb.h"
 #include "libft.h"
 
-static void ft_rb_treeInsert(t_cmp_fn cmp_fn, t_rbNode** root, t_rbNode* node);
-static void ft_rb_treeBalanceInsertion(t_rb* rb, t_rbNode* node);
+static void ft_rb_treeFixViolation(t_rb* rb, t_rbNode* node);
 static void ft_rb_rotateLeft(t_rb* rb, t_rbNode* node);
 static void ft_rb_rotateRight(t_rb* rb, t_rbNode* node);
 static t_rbNode* ft_rb_newNode(const void* data);
 static int simple_cmp(const void* data1, const void* data2);
-static uint64_t inorder(const t_rbNode* node, uint64_t (*fn)(const t_rbNode*));
+static void simple_print(const void* data);
 
-t_rb* ft_rb_new(const t_cmp_fn cmp_fn, const uint64_t nbytes_data) {
+t_rb* ft_rb_new(const t_cmp_fn cmp_fn, const t_free_fn free_fn) {
   t_rb* result = calloc(1, sizeof(t_rbNode));
   if (result == NULL)
     return NULL;
   cmp_fn ? (result->cmp_fn = cmp_fn) : (result->cmp_fn = simple_cmp);
-  result->nbytes_data = nbytes_data;
+  result->free_fn = free_fn;
   return result;
 }
 
-void ft_rb_destroy(t_rb* rb) {
-  // ITERATE OVER ALL NODE AND FREE THEM
-  free(rb);
+void ft_rb_destroy(t_rb* rb) { ft_bTree_destroy((t_bTree*)rb); }
+
+void ft_rb_destroyNode(t_rbNode* rb_node, const t_free_fn free_fn) {
+  if (free_fn)
+    free_fn((void*)rb_node->data);
+  free(rb_node);
 }
 
 uint64_t ft_rb_insert(t_rb* rb, const void* data) {
-  // Insert the data like we are in a classic binary tree, can damage the red/black integrity
+  if (ft_rb_has(rb, data))
+    return 1;
+  // Insert the data like  we are in a classic binary tree, can damage the red/black integrity
   t_rbNode* node = ft_rb_newNode(data);
   if (node == NULL)
     return 1;
@@ -37,122 +41,83 @@ uint64_t ft_rb_insert(t_rb* rb, const void* data) {
     rb->root = node;
     return 0;
   }
-  ft_rb_treeInsert(rb->cmp_fn, &rb->root, node);
-  ft_rb_treeBalanceInsertion(rb, node);
+  ft_bTree_insertNode((t_bTree*)rb, (t_btNode*)node);
+  ft_rb_treeFixViolation(rb, node);
   return 0;
 }
 
 bool ft_rb_has(const t_rb* rb, const void* data) { return ft_rb_get(rb, data) ? true : false; }
 
 const t_rbNode* ft_rb_get(const t_rb* rb, const void* data) {
-  const t_rbNode* x = rb->root;
-  while (x != NULL) {
-    if (rb->cmp_fn(x->data, data) == 0)
-      return x;
-    if (rb->cmp_fn(x->data, data) < 0)
-      x = x->right;
-    else
-      x = x->left;
-  }
-  return NULL;
+  return (const t_rbNode*)ft_bTree_get((t_bTree*)rb, data);
 }
 
-uint64_t ft_rb_iterItem(const t_rb* rb, uint64_t (*iter_fn)(const t_rbNode*)) { return inorder(rb->root, iter_fn); }
+const t_rbNode* ft_rb_getMin(const t_rb* rb) { return (const t_rbNode*)ft_bTree_getMin((t_bTree*)rb); }
 
-void ft_rb_print(const t_rbNode* root, uint64_t space) {
-  if (root == NULL)
-    return;
-  space += 10;
-  ft_rb_print(root->right, space);
-  printf("\n");
-  for (uint64_t i = 10; i < space; i++)
-    printf(" ");
-  printf("%#lx|%s\n", (uint64_t)root->data, root->color ? "BLACK" : "RED");
-  ft_rb_print(root->left, space);
+const t_rbNode* ft_rb_getMax(const t_rb* rb) { return (const t_rbNode*)ft_bTree_getMax((t_bTree*)rb); }
+
+const t_rbNode* ft_rb_inorderNext(const t_rbNode* node) {
+  return (const t_rbNode*)ft_bTree_inorderNext((t_btNode*)node);
 }
 
-// Private FN, insert a node inside the tree
-static void ft_rb_treeInsert(t_cmp_fn cmp_fn, t_rbNode** root, t_rbNode* node) {
-  t_rbNode* y = NULL;
-  t_rbNode* x = *root;
-  while (x != NULL) {
-    y = x;
-    if (cmp_fn(node->data, x->data) < 0)
-      x = x->left;
-    else
-      x = x->right;
-  }
-  node->parent = y;
-  if (cmp_fn(node->data, y->data) > 0)
-    y->right = node;
-  else
-    y->left = node;
-  node->color = RED;
+void ft_rb_print(const t_rbNode* root, const uint64_t space) { ft_bTree_printFn((const t_btNode*)root, space, simple_print); }
+
+ void ft_rb_printFn(const t_rbNode* root, uint64_t space, void (*print_data)(const void* data)) {
+  ft_bTree_printFn((t_btNode*)root, space, print_data);
 }
 
 // Private FN, to balance the tree after the insertion
-static void ft_rb_treeBalanceInsertion(t_rb* rb, t_rbNode* node) {
-  while (node != rb->root && node != rb->root->left && node != rb->root->right && node->parent->color == RED) {
-    t_rbNode* y = NULL;
-    if (node->parent && node->parent->parent && node->parent == node->parent->parent->left)
-      y = node->parent->parent->right;
-    else
-      y = node->parent->parent->left;
-    if (!y)
-      node = node->parent->parent;
-    else if (y->color == RED) {
-      y->color = BLACK;
-      node->parent->color = BLACK;
-      node->parent->parent->color = RED;
-      node = node->parent->parent;
-      continue;
+static void ft_rb_treeFixViolation(t_rb* rb, t_rbNode* node) {
+  t_rbNode* u = NULL;
+  while (node->parent && node->parent->color == RED) {
+    printf("one iter\n");
+    if (node->parent == node->parent->parent->right) {
+      u = node->parent->parent->left;
+      if (u->color == RED) {
+        u->color = BLACK;
+        node->parent->color = BLACK;
+        node->parent->parent = RED;
+        node = node->parent->parent;
+      }
+      else {
+        if (node == node->parent->left) {
+          node = node->parent;
+          ft_rb_rotateRight(rb, node);
+        }
+        node->parent->color = BLACK;
+        node->parent->parent->color = RED;
+        node = node->parent->parent;
+      }
     }
-    // case 0
-    if (node->parent && node->parent->parent && node->parent == node->parent->parent->left &&
-        node == node->parent->left) {
-      const e_color tmp = node->parent->color;
-      node->parent->color = node->parent->parent->color;
-      node->parent->parent->color = tmp;
-      ft_rb_rotateRight(rb, node->parent->parent);
+    else {
+      u = node->parent->parent->right;
+      if (node->color == RED) {
+        u->color = BLACK;
+        node->parent->color = BLACK;
+        node->parent->parent->color = RED;
+        node = node->parent->parent;
+      }
+      else {
+        if (node == node->parent->right) {
+          node = node->parent;
+          ft_rb_rotateLeft(rb, node);
+        }
+        node->parent->color = BLACK;
+        node->parent->parent->color = RED;
+        ft_rb_rotateRight(rb, node);
+      }
     }
-    // case 1
-    if (node->parent && node->parent->parent && node->parent == node->parent->parent->left &&
-        node == node->parent->right) {
-      const e_color tmp = node->color;
-      node->color = node->parent->parent->color;
-      node->parent->parent->color = tmp;
-      ft_rb_rotateLeft(rb, node->parent);
-      ft_rb_rotateRight(rb, node->parent->parent);
-    }
-    // case 2
-    if (node->parent && node->parent->parent && node->parent == node->parent->parent->right &&
-        node == node->parent->right) {
-      const e_color tmp = node->parent->color;
-      node->parent->color = node->parent->parent->color;
-      node->parent->parent->color = tmp;
-      ft_rb_rotateLeft(rb, node->parent->parent);
-    }
-    // case 3
-    if (node->parent && node->parent->parent && node->parent == node->parent->parent->right &&
-        node == node->parent->left) {
-      const e_color tmp = node->color;
-      node->color = node->parent->parent->color;
-      node->parent->parent->color = tmp;
-      ft_rb_rotateRight(rb, node->parent);
-      ft_rb_rotateLeft(rb, node->parent->parent);
-    }
+    if (node == rb->root)
+      break;
   }
-  rb->root->color = BLACK;
 }
 
 // Private FN, left rotate the node inside the RB tree
 static void ft_rb_rotateLeft(t_rb* rb, t_rbNode* node) {
-  if (node == NULL || node->right == NULL)
-    return;
   t_rbNode* y = node->right;
   node->right = y->left;
-  if (node->right != NULL)
-    node->right->parent = node;
+  if (y->left != NULL)
+    y->left->parent = node;
   y->parent = node->parent;
   if (node->parent == NULL)
     rb->root = y;
@@ -166,42 +131,40 @@ static void ft_rb_rotateLeft(t_rb* rb, t_rbNode* node) {
 
 // Private FN, right rotate the node inside the RB tree
 static void ft_rb_rotateRight(t_rb* rb, t_rbNode* node) {
-  if (node == NULL || node->left == NULL)
-    return;
   t_rbNode* y = node->left;
-  y->left = node->right;
-  if (node->right != NULL)
-    node->parent = y->parent;
-  node->parent = y->parent;
-  if (node->parent == NULL)
-    rb->root = node;
-  else if (y == y->parent->left)
-    y->parent->left = node;
-  else
-    y->parent->right = node;
-  node->right = y;
-  y->parent = node;
+  node->left = y->right;
+  if (y->right != NULL) {
+    y->right->parent = node;
+  }
+  y->parent = node->parent;
+  if (node->parent == NULL) {
+    rb->root = y;
+  }
+  else if (node == node->parent->right) {
+    node->parent->right = y;
+  }
+  else {
+    node->parent->left = y;
+  }
+  y->right = node;
+  node->parent = y;
 }
 
 // Private FN, create a new node on the heap that hold data
 static t_rbNode* ft_rb_newNode(const void* data) {
   t_rbNode* result = calloc(1, sizeof(t_rbNode));
+  printf("one node created at %p\n", result);
   if (result == NULL)
     return NULL;
-  result->color = RED;
   result->data = data;
+  result->color = RED;
   return result;
 }
 
-// Privatae FN, simple cmp FN if none is provided by the user
+// Private FN, simple cmp FN if none is provided by the user
 static int simple_cmp(const void* data1, const void* data2) { return data1 - data2; }
 
-static uint64_t inorder(const t_rbNode* node, uint64_t (*fn)(const t_rbNode*)) {
-  if (node == NULL)
-    return 0;
-  inorder(node->left, fn);
-  if (fn(node))
-    return 1;
-  inorder(node->right, fn);
-  return 0;
+static void simple_print(const void* data) {
+  const t_rbNode* node = (t_rbNode*)data;
+  printf("0x%lx:%s\n", (uint64_t)node->data, node->color ? "BLACK" : "RED");
 }
