@@ -8,7 +8,11 @@ t_set* ft_set_new(const uint64_t nbytes) {
   t_set* result = ft_calloc(1, sizeof(t_set));
   if (result == NULL)
     return NULL;
-  ft_memcpy((void*)&result->nbytes_data, &nbytes, sizeof(void*));
+  *(uint64_t*)&result->nbytes_data = nbytes;
+  if (ft_set_reserve(result, 16) != 0) {
+    ft_set_destroy(result);
+    return NULL;
+  }
   return result;
 }
 
@@ -16,7 +20,10 @@ t_set* ft_set_clone(const t_set* set) {
   t_set* result = ft_set_new(set->nbytes_data);
   if (result == NULL)
     return NULL;
-  ft_set_reserve(result, set->capacity);
+  if (ft_set_reserve(result, set->capacity)) {
+    ft_set_destroy(result);
+    return NULL;
+  }
   ft_set_push(result, set->data, set->len * set->nbytes_data);
   return result;
 }
