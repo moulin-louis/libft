@@ -26,10 +26,10 @@ t_set* ft_set_new(uint64_t nbytes);
 t_set* ft_set_clone(const t_set* set);
 
 // Clear the vector (keep the allocated array)
-void ft_set_clear(t_set* set);
+void ft_set_clear(t_set* set, uint64_t (*destroy_fn)(void *data));
 
 // Destroy the t_set
-void ft_set_destroy(t_set* set);
+void ft_set_destroy(t_set* set, uint64_t (*destroy_fn)(void *data));
 
 // Reserver a given capacity for the content array
 uint64_t ft_set_reserve(t_set* set, uint64_t capacity);

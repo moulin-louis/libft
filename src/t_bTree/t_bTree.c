@@ -30,7 +30,7 @@ void ft_bTree_destroy(t_bTree* b_tree) {
     ft_set_push(nodes, &node, sizeof(void*));
   for (uint64_t i = 0; i < nodes->len; ++i)
     ft_bTree_destroyNode(*(t_btNode**)ft_set_get(nodes, i), b_tree->free_fn);
-  ft_set_destroy(nodes);
+  ft_set_destroy(nodes, NULL);
   free(b_tree);
 }
 

@@ -24,7 +24,7 @@ t_set* read_file(const char* path) {
     char buff[4096];
     const ssize_t retval = read(file, buff, sizeof(buff) - 1);
     if (retval == -1) {
-      ft_set_destroy(set);
+      ft_set_destroy(set, NULL);
       close(file);
       return NULL;
     }
@@ -33,7 +33,7 @@ t_set* read_file(const char* path) {
     buff[retval] = 0;
     if (ft_set_push(set, buff, retval + 1)) {
       close(file);
-      ft_set_destroy(set);
+      ft_set_destroy(set, NULL);
       return NULL;
     }
   }
